@@ -43,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
     ArrayList<String> decorationPrices;
 
+    //index of a price that will be reduced by 50%
+    int halfPriceIndex = 0;
+
     //BL shit
     private BluetoothAdapter BA;
     private Set<BluetoothDevice> pairedDevices;
@@ -262,6 +265,16 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
             }
         });
 
+        //plusButton
+        final Button halfPrice = (Button) findViewById(R.id.halfPriceButton);
+
+        halfPrice.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setPriceToHalfPrice();
+            }
+        });
+
+
         //quickButtonSetup
 
         final Button quickButtonA = (Button) findViewById(R.id.quickPrintA);
@@ -314,6 +327,32 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         });
     }
 
+    private void setPriceToHalfPrice() {
+        String[] eachPrice = calcOperationDisplay.getText().toString().split("\\+");
+
+        //if the index of a price that will be reduced by 50%
+        if(halfPriceIndex < eachPrice.length){
+            int price = Integer.valueOf(eachPrice[halfPriceIndex].trim());
+            price = price / 2;
+            if (price%10 == 5){
+                price += 5;
+            }
+            eachPrice[halfPriceIndex] = String.valueOf(price);
+            halfPriceIndex++;
+        }
+
+        String newCalcOperationText = "";
+        int totalPrice = 0;
+        for (String tmpPrice : eachPrice){
+            newCalcOperationText += tmpPrice.trim() + "+";
+            totalPrice += Integer.valueOf(tmpPrice.trim());
+        }
+
+        calcOperationDisplay.setText(newCalcOperationText);
+        priceDisplay.setText(String.valueOf(totalPrice));
+
+    }
+
     private void handleCalcOperation(String operation) {
         String textInCalcOperation = (String) calcOperationDisplay.getText();
         if (textInCalcOperation.equals("0")) return;
@@ -321,7 +360,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         String lastChar = textInCalcOperation.trim().substring(textInCalcOperation.trim().length()-1);
 
         if (!lastChar.equals("+")){
-            textInCalcOperation = textInCalcOperation + " + ";
+            textInCalcOperation = textInCalcOperation + "+";
         }
 
         calcOperationDisplay.setText(textInCalcOperation);
@@ -433,14 +472,11 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
                             //here we add each price of a service
 
+                            String[] eachPrice = calcOperationDisplay.getText().toString().split("\\+");
 
-                            byte[] basePrice = StringUtils.strTobytes("Sluzba " + getBasePrice() + ",- Kc");
-                            list.add(basePrice);
-                            list.add(DataForSendToPrinterPos58.printAndFeedLine());
-
-                            if (!decorationPrices.isEmpty()){
-                                byte[] customPrice = StringUtils.strTobytes("Zdobeni " + getCustomPrice() + ",- Kc");
-                                list.add(customPrice);
+                            for (String tmpPrice : eachPrice){
+                                byte[] basePrice = StringUtils.strTobytes("Sluzba " + tmpPrice + ",- Kc");
+                                list.add(basePrice);
                                 list.add(DataForSendToPrinterPos58.printAndFeedLine());
                             }
 
@@ -513,6 +549,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         priceDisplay.setText("0");
         calcOperationDisplay.setText("0");
         decorationPrices.clear();
+        halfPriceIndex = 0;
     };
 
     public void addNumberToPriceDisplay(String inputNo){

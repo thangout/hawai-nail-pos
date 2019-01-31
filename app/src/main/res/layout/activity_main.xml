@@ -187,6 +187,16 @@
         app:layout_constraintBottom_toTopOf="@+id/customPriceButton"
         app:layout_constraintStart_toStartOf="@+id/buttonErase" />
 
+    <Button
+        android:id="@+id/halfPriceButton"
+        android:layout_width="159dp"
+        android:layout_height="98dp"
+        android:layout_marginBottom="32dp"
+        android:text="50%"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@+id/plusButton"
+        app:layout_constraintStart_toStartOf="@+id/buttonErase" />
+
     <TextView
         android:id="@+id/viewCalcOperation"
         android:layout_width="wrap_content"
