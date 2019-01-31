@@ -24,6 +24,7 @@ import net.posprinter.posprinterface.ProcessData;
 import net.posprinter.posprinterface.UiExecute;
 import net.posprinter.service.PosprinterService;
 import net.posprinter.utils.DataForSendToPrinterPos58;
+import net.posprinter.utils.DataForSendToPrinterPos80;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -131,7 +132,12 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         // TODO dat natvrdo jmeno printeru
         String posPrinterName = sharedPref.getString("pos_printer_name", "-1");
 
-        posPrinterName = "Printer001";
+
+        //sestka
+        //posPrinterName = "Printer001";
+
+        //flora
+        posPrinterName = "Printer002";
 
         ArrayList<BluetoothDevice> list = new ArrayList();
 
@@ -262,7 +268,10 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         quickButtonA.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                addNumberToPriceDisplay("280");
+                //sestka
+                //addNumberToPriceDisplay("280");
+                //Flora
+                addNumberToPriceDisplay("340");
                 printReceipt();
             }
         });
@@ -271,7 +280,10 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         quickButtonB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                addNumberToPriceDisplay("380");
+                //sestka
+                //addNumberToPriceDisplay("380");
+                //flora
+                addNumberToPriceDisplay("450");
                 printReceipt();
             }
         });
@@ -280,7 +292,10 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         quickButtonC.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                addNumberToPriceDisplay("460");
+                //sestka
+                //addNumberToPriceDisplay("460");
+                //flora
+                addNumberToPriceDisplay("550");
                 printReceipt();
             }
         });
@@ -289,7 +304,11 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         quickButtonD.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                addNumberToPriceDisplay("480");
+                //sestka
+                //addNumberToPriceDisplay("480");
+
+                //flora
+                addNumberToPriceDisplay("1000");
                 printReceipt();
             }
         });
@@ -374,10 +393,19 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                             list.add(DataForSendToPrinterPos58.selectCharacterCodePage(6));
                             //
                             list.add(DataForSendToPrinterPos58.selectAlignment(1)); //center
+
+
                             String companyHeader = "EURO Nails.cz s.r.o.";
                             String companyAddress = "Prazská 3/5, 268 01, Horovice";
                             String companyID = "IC: 27868648, DIC: CZ27868648";
+                            /*
+                            SESTKA
                             String companyShop = "Pobocka: Fajtlova 1090/1, 161 00, Praha 6, OC ŠESTKA";
+                            */
+
+                            //FLORA
+                            String companyShop = "Pobocka: Vinohradska 151, 130 00, Praha 3";
+                            String companyShop2 = "OC Atrium Flora";
 
                             //adding current time
                             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss ");
@@ -392,6 +420,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                             headerList.add(companyAddress);
                             headerList.add(companyID);
                             headerList.add(companyShop);
+                            headerList.add(companyShop2);
                             headerList.add(datePrinted);
                             headerList.add(divider);
 
@@ -439,13 +468,18 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
                             list.add(StringUtils.strTobytes("7 dni zaruka na nase sluzby"));
                             list.add(DataForSendToPrinterPos58.printAndFeedForward(2));
-                            list.add(StringUtils.strTobytes("*** Dekujeme za navstevu ***"));
+                            list.add(StringUtils.strTobytes("*** Dekujeme za Vasi navstevu ***"));
                             list.add(DataForSendToPrinterPos58.printAndFeedForward(6));
 
                             //cut pager
-                            //ist.add(DataForSendToPrinterPos58.selectCutPagerModerAndCutPager(66,1));
+                            //flora
+                            list.add(DataForSendToPrinterPos80.selectCutPagerModerAndCutPager(66,1));
 
-                            list.add(DataForSendToPrinterPos58.creatCashboxContorlPulse(1,25,250));
+                            //sestka
+                            //list.add(DataForSendToPrinterPos58.creatCashboxContorlPulse(1,25,250));
+
+                            //flora
+                            list.add(DataForSendToPrinterPos80.creatCashboxContorlPulse(0,25,250));
 
                             return list;
                         }
