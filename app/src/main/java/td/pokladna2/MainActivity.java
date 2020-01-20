@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         decorationPrices = new ArrayList<>();
         setupButtons();
 
+        //comment for deployment on simulator
         setupBT();
 
     }
