@@ -9,7 +9,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         setupButtons();
 
         //comment for deployment on simulator
-        setupBT();
+        //setupBT();
 
     }
 
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         buttonCustomPrice.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                androidx.fragment.app.FragmentManager fm = getSupportFragmentManager();
                 CustomPriceFragment dialogFragment = CustomPriceFragment.newInstances(2);
                 dialogFragment.show(fm,"asd");
 
