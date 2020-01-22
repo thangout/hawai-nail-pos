@@ -9,6 +9,8 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 
 import net.posprinter.posprinterface.IMyBinder;
 import net.posprinter.posprinterface.ProcessData;
@@ -29,8 +39,10 @@ import net.posprinter.utils.DataForSendToPrinterPos80;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements CustomPriceFragment.EditCustomPriceDialogListener {
@@ -56,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
     //bindService connection
     ServiceConnection conn;
 
+    FirebaseFirestore db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         //here we store each custom added price (zdobeni)
         decorationPrices = new ArrayList<>();
         setupButtons();
+
+        db = FirebaseFirestore.getInstance();
 
         //comment for deployment on simulator
         //setupBT();
@@ -219,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                 @Override
                 public void onClick(View view) {
                     addNumberToPriceDisplay(String.valueOf(finalI));
+
                 }
             });
         }
@@ -230,6 +247,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
             @Override
             public void onClick(View view) {
                 setZeroPriceDisplay();
+
             }
         });
 
@@ -285,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                 //sestka
                 //addNumberToPriceDisplay("280");
                 //Flora
-                addNumberToPriceDisplay("340");
+                addNumberToPriceDisplay("360");
                 printReceipt();
             }
         });
@@ -297,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                 //sestka
                 //addNumberToPriceDisplay("380");
                 //flora
-                addNumberToPriceDisplay("450");
+                addNumberToPriceDisplay("480");
                 printReceipt();
             }
         });
@@ -309,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                 //sestka
                 //addNumberToPriceDisplay("460");
                 //flora
-                addNumberToPriceDisplay("550");
+                addNumberToPriceDisplay("580");
                 printReceipt();
             }
         });
@@ -326,6 +344,30 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                 printReceipt();
             }
         });
+    }
+
+    private void saveTransactionToDbs() {
+        Map<String, Object> user = new HashMap<>();
+        user.put("price", Integer.valueOf(getCurrentPrice()));
+        user.put("timestamp", Timestamp.now());
+
+
+        //production collection will be nailsfloraprod
+        //use some other name for test such as moneytest
+        db.collection("nailsfloraprod")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("x", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("x", "Error adding document", e);
+                    }
+                });
     }
 
     private void setPriceToHalfPrice() {
@@ -517,6 +559,9 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
                             //flora
                             list.add(DataForSendToPrinterPos80.creatCashboxContorlPulse(0,25,250));
+
+                            //save the money to dbs
+                            saveTransactionToDbs();
 
                             return list;
                         }

@@ -11,7 +11,7 @@
         android:layout_width="125dp"
         android:layout_height="91dp"
         android:layout_marginStart="28dp"
-        android:text="550"
+        android:text="580"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/quickPrintA"
         app:layout_constraintStart_toEndOf="@+id/quickPrintB" />
@@ -212,7 +212,7 @@
         android:layout_width="117dp"
         android:layout_height="91dp"
         android:layout_marginBottom="76dp"
-        android:text="340"
+        android:text="360"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/customPriceButton" />
@@ -222,7 +222,7 @@
         android:layout_width="125dp"
         android:layout_height="91dp"
         android:layout_marginStart="28dp"
-        android:text="450"
+        android:text="480"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/quickPrintA"
         app:layout_constraintStart_toEndOf="@+id/quickPrintA" />
