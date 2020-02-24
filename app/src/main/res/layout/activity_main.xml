@@ -7,24 +7,33 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/minusButton"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:text="-"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toBottomOf="@+id/plusButton"
+        app:layout_constraintEnd_toEndOf="@+id/noThree" />
+
+    <Button
         android:id="@+id/quickPrintC"
         android:layout_width="125dp"
         android:layout_height="91dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginEnd="8dp"
         android:text="580"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/quickPrintA"
-        app:layout_constraintStart_toEndOf="@+id/quickPrintB" />
+        app:layout_constraintEnd_toStartOf="@+id/quickPrintD"
+        tools:layout_editor_absoluteY="1069dp" />
 
     <Button
         android:id="@+id/quickPrintD"
         android:layout_width="125dp"
         android:layout_height="91dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginTop="8dp"
         android:text="1000"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/quickPrintA"
-        app:layout_constraintStart_toEndOf="@+id/quickPrintC" />
+        app:layout_constraintTop_toBottomOf="@+id/quickPrintB"
+        tools:layout_editor_absoluteX="319dp" />
 
     <Button
         android:id="@+id/noThree"
@@ -71,7 +80,7 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginStart="316dp"
-        android:layout_marginTop="276dp"
+        android:layout_marginTop="266dp"
         android:text="7"
         android:textSize="50sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -131,22 +140,21 @@
         android:id="@+id/viewPrice"
         android:layout_width="340dp"
         android:layout_height="111dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="84dp"
         android:text="0"
         android:textAlignment="textStart"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="80sp"
-        app:layout_constraintStart_toStartOf="@+id/buttonErase"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonErase"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="166dp"
+        android:layout_width="120dp"
         android:layout_height="108dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="56dp"
+        android:layout_marginEnd="24dp"
         android:background="@color/colorAccent"
         android:text="Xoa"
         android:textColor="@android:color/white"
@@ -159,43 +167,43 @@
         style="@style/Widget.AppCompat.Button"
         android:layout_width="261dp"
         android:layout_height="108dp"
-        android:layout_marginStart="68dp"
+        android:layout_marginTop="120dp"
         android:background="@color/colorPrimary"
         android:text="In hoa don"
         android:textColor="@android:color/white"
         android:textSize="36sp"
-        app:layout_constraintStart_toEndOf="@+id/noZero"
-        app:layout_constraintTop_toTopOf="@+id/noZero" />
+        app:layout_constraintEnd_toEndOf="@+id/minusButton"
+        app:layout_constraintTop_toBottomOf="@+id/minusButton" />
 
     <Button
         android:id="@+id/customPriceButton"
-        android:layout_width="151dp"
+        android:layout_width="120dp"
         android:layout_height="101dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="32dp"
         android:text="Trang trí"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/noZero"
-        app:layout_constraintStart_toStartOf="@+id/buttonErase" />
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/halfPriceButton"
+        app:layout_constraintTop_toBottomOf="@+id/halfPriceButton" />
 
     <Button
         android:id="@+id/plusButton"
-        android:layout_width="159dp"
-        android:layout_height="98dp"
-        android:layout_marginBottom="32dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="50dp"
         android:text="+"
         android:textSize="50sp"
-        app:layout_constraintBottom_toTopOf="@+id/customPriceButton"
-        app:layout_constraintStart_toStartOf="@+id/buttonErase" />
+        app:layout_constraintBottom_toBottomOf="@+id/noZero"
+        app:layout_constraintStart_toEndOf="@+id/noZero" />
 
     <Button
         android:id="@+id/halfPriceButton"
-        android:layout_width="159dp"
-        android:layout_height="98dp"
-        android:layout_marginBottom="32dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="32dp"
         android:text="50%"
         android:textSize="50sp"
-        app:layout_constraintBottom_toTopOf="@+id/plusButton"
-        app:layout_constraintStart_toStartOf="@+id/buttonErase" />
+        app:layout_constraintStart_toStartOf="@+id/buttonErase"
+        app:layout_constraintTop_toBottomOf="@+id/buttonErase" />
 
     <TextView
         android:id="@+id/viewCalcOperation"
@@ -211,20 +219,47 @@
         android:id="@+id/quickPrintA"
         android:layout_width="117dp"
         android:layout_height="91dp"
-        android:layout_marginBottom="76dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="360"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/customPriceButton" />
+        app:layout_constraintBottom_toTopOf="@+id/quickPrintC"
+        app:layout_constraintEnd_toStartOf="@+id/quickPrintB" />
 
     <Button
         android:id="@+id/quickPrintB"
         android:layout_width="125dp"
         android:layout_height="91dp"
-        android:layout_marginStart="28dp"
         android:text="480"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/quickPrintA"
-        app:layout_constraintStart_toEndOf="@+id/quickPrintA" />
+        app:layout_constraintTop_toTopOf="@+id/buttonPrintReciept"
+        tools:layout_editor_absoluteX="319dp" />
+
+    <TextView
+        android:id="@+id/employeeNameText"
+        android:layout_width="252dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="108dp"
+        android:text="TextView"
+        android:textSize="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/viewPrice"
+        app:layout_constraintStart_toEndOf="@+id/viewPrice" />
+
+    <ListView
+        android:id="@+id/transactionListView"
+        android:layout_width="122dp"
+        android:layout_height="516dp"
+        app:layout_constraintStart_toStartOf="@+id/viewPrice"
+        app:layout_constraintTop_toTopOf="@+id/noSeven"></ListView>
+
+    <TextView
+        android:id="@+id/transSumText"
+        android:layout_width="206dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="32dp"
+        android:text="TextView"
+        android:textSize="40sp"
+        app:layout_constraintStart_toStartOf="@+id/transactionListView"
+        app:layout_constraintTop_toBottomOf="@+id/transactionListView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

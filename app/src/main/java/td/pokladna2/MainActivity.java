@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -11,12 +12,14 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +28,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 import net.posprinter.posprinterface.IMyBinder;
@@ -38,8 +47,10 @@ import net.posprinter.utils.DataForSendToPrinterPos80;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -70,11 +81,20 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
     FirebaseFirestore db;
 
+    String employeeName;
+    String employeeId;
+
+    String[] mobileArray = {"Android"};
+
+    boolean isConnectedToPrinter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         priceDisplay = findViewById(R.id.viewPrice);
         calcOperationDisplay = findViewById(R.id.viewCalcOperation);
@@ -84,18 +104,119 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         //here we store each custom added price (zdobeni)
         decorationPrices = new ArrayList<>();
+
+
         setupButtons();
 
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+
         db = FirebaseFirestore.getInstance();
+        db.setFirestoreSettings(settings);
+
+
+        setupEmployeeInfo();
 
         //comment for deployment on simulator
         //setupBT();
 
     }
 
+    private void setupEmployeeInfo() {
+        Intent intent = getIntent();
+        employeeName = intent.getStringExtra("name");
+        employeeId = intent.getStringExtra("id");
+
+        TextView empNameText = findViewById(R.id.employeeNameText);
+        empNameText.setText(employeeName);
+
+        //TODO fetch data about the employee all his transactions
+
+        //set time to query data
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+
+        int dayOfMonth = cal.get(cal.DAY_OF_MONTH);
+        int year = cal.get(cal.YEAR);
+        int month = cal.get(cal.MONTH);
+
+
+        cal.set(year,month,dayOfMonth,1,0);
+        Date startDate = cal.getTime();
+        System.out.println("datum" + cal.toString());
+        final long startTmp = startDate.getTime();
+
+        cal.set(year,month,dayOfMonth,23,0);
+        System.out.println("datum2" + cal.toString());
+        Date endDate = cal.getTime();
+        long endTmp = endDate.getTime();
+        //time in miliseconds
+
+
+        CollectionReference transactionsRef = db.collection("nailsfloratest");
+        //Query query = transactionsRef.whereEqualTo("employeeId", employeeId).whereGreaterThan("timestamp",startDate).whereLessThan("timestamp",endDate);
+        Query query = transactionsRef.whereEqualTo("employeeId",employeeId).orderBy("timestamp").startAt(startDate).endAt(endDate);
+        //Query query = transactionsRef.whereEqualTo("employeeId", employeeId).orderBy("timestamp");
+
+        Log.d("DATABASE", "Setting up employee data ");
+
+
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                final ArrayList<String> priceLists = new ArrayList<>();
+
+                int transactionSum = 0;
+                Log.d("DATABASE", "Started quering: and found " + queryDocumentSnapshots.size());
+
+                for (Iterator<QueryDocumentSnapshot> it = queryDocumentSnapshots.iterator(); it.hasNext(); ) {
+                    DocumentSnapshot snap = it.next();
+
+                    HashMap map = (HashMap) snap.getData();
+                    Long price = (Long) map.get("price");
+                    Timestamp timestamp = (Timestamp) map.get("timestamp");
+                    long convertedTmp = timestamp.getSeconds();
+                    priceLists.add(String.valueOf(price));
+
+                    transactionSum += price;
+
+                    System.out.println("____________");
+                    System.out.println(convertedTmp);
+                    System.out.println(startTmp);
+                    System.out.println("____________");
+                }
+
+                String[] a = new String[20];
+
+                for (int i = 0; i < a.length; i++) {
+                    a[i] = " ";
+                }
+
+                if (!priceLists.isEmpty()) {
+                    for (int i = 0; i < priceLists.size(); i++) {
+                            a[i] = priceLists.get(i);
+                    }
+                }
+
+                //load data to display transactions
+                ArrayAdapter adapter = new ArrayAdapter<String>(MainActivity.this,
+                        R.layout.single_list_view, a);
+
+                ListView listView = (ListView) findViewById(R.id.transactionListView);
+                listView.setAdapter(adapter);
+
+                TextView transactionSumText = (TextView) findViewById(R.id.transSumText);
+                transactionSumText.setText(String.valueOf(transactionSum));
+            }
+        });
+
+
+    }
+
     public void setupBT(){
         //bluetooth magic
-
 
         BA = BluetoothAdapter.getDefaultAdapter();
 
@@ -185,11 +306,13 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         binder.connectBtPort(btDeviceAddress, new UiExecute() {
             @Override
             public void onsucess() {
+                isConnectedToPrinter = true;
                 showSnackBar("connected too BT printer");
             }
 
             @Override
             public void onfailed() {
+                isConnectedToPrinter = false;
                 showSnackBar("didnt connect to BT printer");
             }
         });
@@ -284,7 +407,17 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
             }
         });
 
-        //plusButton
+        //minusButton
+
+        final Button minusButton = (Button) findViewById(R.id.minusButton);
+
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                deleteLastTransaction();
+            }
+        });
+
+
         final Button halfPrice = (Button) findViewById(R.id.halfPriceButton);
 
         halfPrice.setOnClickListener(new View.OnClickListener() {
@@ -350,11 +483,12 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         Map<String, Object> user = new HashMap<>();
         user.put("price", Integer.valueOf(getCurrentPrice()));
         user.put("timestamp", Timestamp.now());
+        user.put("employeeId", employeeId);
 
 
         //production collection will be nailsfloraprod
         //use some other name for test such as moneytest
-        db.collection("nailsfloraprod")
+        db.collection("nailsfloratest")
                 .add(user)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -406,6 +540,10 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
             textInCalcOperation = textInCalcOperation + "+";
         }
 
+        if (!lastChar.equals("-")){
+            textInCalcOperation = textInCalcOperation + "-";
+        }
+
         calcOperationDisplay.setText(textInCalcOperation);
     }
 
@@ -438,6 +576,9 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
     //TODO: print the price to the printer
     private void printReceipt(){
+
+        //if bluetooth printer is not connected
+        if (!isConnectedToPrinter) return;
 
         binder.writeDataByYouself(
                 new UiExecute() {
@@ -494,6 +635,9 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                             String currentDateTimeString = sdf.format(new Date());
                             String datePrinted = "Datum: " + currentDateTimeString;
 
+                            //id of logged in employee
+                            String employeeIdReciept = employeeId;
+
                             String divider = "------------------";
 
                             ArrayList<String> headerList = new ArrayList<String>();
@@ -504,6 +648,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                             headerList.add(companyShop);
                             headerList.add(companyShop2);
                             headerList.add(datePrinted);
+                            headerList.add(employeeIdReciept);
                             headerList.add(divider);
 
                             for(String str : headerList){
@@ -563,6 +708,9 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                             //save the money to dbs
                             saveTransactionToDbs();
 
+                            //finish();
+                            MainActivity.this.finish();
+
                             return list;
                         }
                         return null;
@@ -592,10 +740,12 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
     }
 
     public void setZeroPriceDisplay(){
+
         priceDisplay.setText("0");
         calcOperationDisplay.setText("0");
         decorationPrices.clear();
         halfPriceIndex = 0;
+
     };
 
     public void addNumberToPriceDisplay(String inputNo){
@@ -620,6 +770,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         priceDisplay.setText(textInDisplay + String.valueOf(inputNo));
         updateMainPriceDisplay();
     }
+
 
     private void updateMainPriceDisplay() {
         String[] eachPrice = calcOperationDisplay.getText().toString().split("\\+");
@@ -654,6 +805,111 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         decorationPrices.add(inputText);
 
         showSnackBar(inputText);
+    }
+
+    //adds the last transaction as a negative number and by that fix the error printing
+    void deleteLastTransaction(){
+
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+
+        int dayOfMonth = cal.get(cal.DAY_OF_MONTH);
+        int year = cal.get(cal.YEAR);
+        int month = cal.get(cal.MONTH);
+
+
+        cal.set(year,month,dayOfMonth,1,0);
+        Date startDate = cal.getTime();
+        System.out.println("datum" + cal.toString());
+        final long startTmp = startDate.getTime();
+
+        cal.set(year,month,dayOfMonth,23,0);
+        System.out.println("datum2" + cal.toString());
+        Date endDate = cal.getTime();
+        long endTmp = endDate.getTime();
+        //time in miliseconds
+
+
+        CollectionReference transactionsRef = db.collection("nailsfloratest");
+        //Query query = transactionsRef.whereEqualTo("employeeId", employeeId).whereGreaterThan("timestamp",startDate).whereLessThan("timestamp",endDate);
+        Query query = transactionsRef.whereEqualTo("employeeId",employeeId).orderBy("timestamp").startAt(startDate).endAt(endDate);
+        //Query query = transactionsRef.whereEqualTo("employeeId", employeeId).orderBy("timestamp");
+
+        Log.d("DATABASE", "Setting up employee data ");
+
+
+
+
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                final LinkedList<String> priceLists = new LinkedList<>();
+
+
+
+                int transactionSum = 0;
+                Log.d("DATABASE", "Started quering: and found " + queryDocumentSnapshots.size());
+
+                for (Iterator<QueryDocumentSnapshot> it = queryDocumentSnapshots.iterator(); it.hasNext(); ) {
+                    DocumentSnapshot snap = it.next();
+
+                    HashMap map = (HashMap) snap.getData();
+                    Long price = (Long) map.get("price");
+                    Timestamp timestamp = (Timestamp) map.get("timestamp");
+                    long convertedTmp = timestamp.getSeconds();
+                    priceLists.add(String.valueOf(price));
+
+                    transactionSum += price;
+                }
+
+                //if there is no transaction yet then cant proceed with fixing the last price
+                if (priceLists.isEmpty()) return;
+
+                showSnackBar(priceLists.getLast() + "");
+
+                // create an alert builder
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Delete last transaction");
+                // set the custom layout
+                final View customLayout = getLayoutInflater().inflate(R.layout.fragment_delete_transaction, null);
+                builder.setView(customLayout);
+
+                TextView deleteTextView = customLayout.findViewById(R.id.deleteTextView);
+
+                deleteTextView.setText("Would you like to delete last transaction. Amount:"  + priceLists.getLast());
+                // add a button
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // send data from the AlertDialog to the Activity
+                        //EditText editText = customLayout.findViewById(R.id.editText);
+                        String lastPrice = priceLists.getLast();
+                        int lastPriceNumber = Integer.valueOf(lastPrice);
+
+                        //check for the last number if its below zero
+                        if (lastPriceNumber < 0){
+                            dialog.dismiss();
+                            showSnackBar("CANT FIX number below zero");
+                        }else{
+                            priceDisplay.setText(String.valueOf("-" + priceLists.getLast()));
+                            saveTransactionToDbs();
+                            printReceipt();
+                        }
+
+                    }
+                });
+
+                // create and show the alert dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        });
+    }
+
+    private void sendDialogDataToActivity(String data) {
+        Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
     }
 }
 
