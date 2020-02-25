@@ -88,6 +88,10 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
     boolean isConnectedToPrinter;
 
+    //use name = nailsfloratest, for test purposes
+    String DBS_NAME = "nailsfloraprod";
+    //String DBS_NAME = "nailsfloratest";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         setupEmployeeInfo();
 
         //comment for deployment on simulator
-        //setupBT();
+        setupBT();
 
     }
 
@@ -154,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         //time in miliseconds
 
 
-        CollectionReference transactionsRef = db.collection("nailsfloratest");
+        CollectionReference transactionsRef = db.collection(DBS_NAME);
         //Query query = transactionsRef.whereEqualTo("employeeId", employeeId).whereGreaterThan("timestamp",startDate).whereLessThan("timestamp",endDate);
         Query query = transactionsRef.whereEqualTo("employeeId",employeeId).orderBy("timestamp").startAt(startDate).endAt(endDate);
         //Query query = transactionsRef.whereEqualTo("employeeId", employeeId).orderBy("timestamp");
@@ -181,14 +185,9 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                     priceLists.add(String.valueOf(price));
 
                     transactionSum += price;
-
-                    System.out.println("____________");
-                    System.out.println(convertedTmp);
-                    System.out.println(startTmp);
-                    System.out.println("____________");
                 }
 
-                String[] a = new String[20];
+                String[] a = new String[25];
 
                 for (int i = 0; i < a.length; i++) {
                     a[i] = " ";
@@ -477,6 +476,16 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                 printReceipt();
             }
         });
+
+        Button finishMainActivityButton = findViewById(R.id.finishMainActivityButton);
+
+        finishMainActivityButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void saveTransactionToDbs() {
@@ -488,7 +497,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         //production collection will be nailsfloraprod
         //use some other name for test such as moneytest
-        db.collection("nailsfloratest")
+        db.collection(DBS_NAME)
                 .add(user)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -538,10 +547,6 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         if (!lastChar.equals("+")){
             textInCalcOperation = textInCalcOperation + "+";
-        }
-
-        if (!lastChar.equals("-")){
-            textInCalcOperation = textInCalcOperation + "-";
         }
 
         calcOperationDisplay.setText(textInCalcOperation);
@@ -636,7 +641,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                             String datePrinted = "Datum: " + currentDateTimeString;
 
                             //id of logged in employee
-                            String employeeIdReciept = employeeId;
+                            String employeeIdReciept = "Kod: " + employeeId;
 
                             String divider = "------------------";
 
@@ -766,6 +771,12 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         */
 
+        //TODO check the length of the input
+        if (textInDisplay.length() > 4){
+            showSnackBar("Number is too high");
+            return;
+        }
+
         calcOperationDisplay.setText(textInCalcDisplay+String.valueOf(inputNo));
         priceDisplay.setText(textInDisplay + String.valueOf(inputNo));
         updateMainPriceDisplay();
@@ -791,7 +802,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         if (inputText.equals("")) return;
 
         //fix overflow of the integer
-        if(inputText.length() > 7) {
+        if(inputText.length() > 5) {
             showSnackBar("Số quá lớn");
             return;
         }
@@ -830,7 +841,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         //time in miliseconds
 
 
-        CollectionReference transactionsRef = db.collection("nailsfloratest");
+        CollectionReference transactionsRef = db.collection(DBS_NAME);
         //Query query = transactionsRef.whereEqualTo("employeeId", employeeId).whereGreaterThan("timestamp",startDate).whereLessThan("timestamp",endDate);
         Query query = transactionsRef.whereEqualTo("employeeId",employeeId).orderBy("timestamp").startAt(startDate).endAt(endDate);
         //Query query = transactionsRef.whereEqualTo("employeeId", employeeId).orderBy("timestamp");
@@ -870,14 +881,15 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
                 // create an alert builder
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Delete last transaction");
+                builder.setTitle("Xóa giao dịch cuối cùng");
                 // set the custom layout
                 final View customLayout = getLayoutInflater().inflate(R.layout.fragment_delete_transaction, null);
                 builder.setView(customLayout);
 
                 TextView deleteTextView = customLayout.findViewById(R.id.deleteTextView);
 
-                deleteTextView.setText("Would you like to delete last transaction. Amount:"  + priceLists.getLast());
+                //deleteTextView.setText("Would you like to delete last transaction. Amount:"  + priceLists.getLast());
+                deleteTextView.setText("Bạn có muốn xóa số tiền:"  + priceLists.getLast());
                 // add a button
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -893,7 +905,6 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                             showSnackBar("CANT FIX number below zero");
                         }else{
                             priceDisplay.setText(String.valueOf("-" + priceLists.getLast()));
-                            saveTransactionToDbs();
                             printReceipt();
                         }
 
@@ -910,6 +921,15 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
     private void sendDialogDataToActivity(String data) {
         Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (conn != null) {
+            unbindService(conn);
+        }
     }
 }
 
