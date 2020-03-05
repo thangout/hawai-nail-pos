@@ -31,6 +31,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
@@ -57,6 +58,11 @@ import java.util.Map;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements CustomPriceFragment.EditCustomPriceDialogListener {
+
+    //set the ID of a shop that the app is installed for
+    // shopID = 2 is for Sestka
+    // shopID = 1 is for Flora
+    int shopID = 2;
 
     TextView priceDisplay;
 
@@ -89,7 +95,11 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
     boolean isConnectedToPrinter;
 
     //use name = nailsfloratest, for test purposes
-    String DBS_NAME = "nailsfloraprod";
+    //Flora production
+    //String DBS_NAME = "nailsfloraprod";
+
+    //Sestka production
+    String DBS_NAME = "nailssestkaprod";
     //String DBS_NAME = "nailsfloratest";
 
 
@@ -273,11 +283,14 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         String posPrinterName = sharedPref.getString("pos_printer_name", "-1");
 
 
-        //sestka
-        //posPrinterName = "Printer001";
+        if (shopID == 1){
+            //flora
+            posPrinterName = "Printer002";
+        }else if (shopID == 2){
+            //sestka
+            posPrinterName = "Printer001";
+        }
 
-        //flora
-        posPrinterName = "Printer002";
 
         ArrayList<BluetoothDevice> list = new ArrayList();
 
@@ -426,57 +439,6 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         });
 
 
-        //quickButtonSetup
-
-        final Button quickButtonA = (Button) findViewById(R.id.quickPrintA);
-
-        quickButtonA.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //sestka
-                //addNumberToPriceDisplay("280");
-                //Flora
-                addNumberToPriceDisplay("360");
-                printReceipt();
-            }
-        });
-
-        final Button quickButtonB = (Button) findViewById(R.id.quickPrintB);
-
-        quickButtonB.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //sestka
-                //addNumberToPriceDisplay("380");
-                //flora
-                addNumberToPriceDisplay("480");
-                printReceipt();
-            }
-        });
-
-        final Button quickButtonC = (Button) findViewById(R.id.quickPrintC);
-
-        quickButtonC.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //sestka
-                //addNumberToPriceDisplay("460");
-                //flora
-                addNumberToPriceDisplay("580");
-                printReceipt();
-            }
-        });
-
-        final Button quickButtonD = (Button) findViewById(R.id.quickPrintD);
-
-        quickButtonD.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //sestka
-                //addNumberToPriceDisplay("480");
-
-                //flora
-                addNumberToPriceDisplay("1000");
-                printReceipt();
-            }
-        });
-
         Button finishMainActivityButton = findViewById(R.id.finishMainActivityButton);
 
         finishMainActivityButton.setOnClickListener(new View.OnClickListener(){
@@ -493,6 +455,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         user.put("price", Integer.valueOf(getCurrentPrice()));
         user.put("timestamp", Timestamp.now());
         user.put("employeeId", employeeId);
+        user.put("serverTimestamp", FieldValue.serverTimestamp());
+        user.put("shopId", shopID);
 
 
         //production collection will be nailsfloraprod
@@ -579,7 +543,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         calcOperationDisplay.setText(updated);
     }
 
-    //TODO: print the price to the printer
+
     private void printReceipt(){
 
         //if bluetooth printer is not connected
@@ -626,14 +590,22 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                             String companyHeader = "EURO Nails.cz s.r.o.";
                             String companyAddress = "Prazská 3/5, 268 01, Horovice";
                             String companyID = "IC: 27868648, DIC: CZ27868648";
-                            /*
-                            SESTKA
-                            String companyShop = "Pobocka: Fajtlova 1090/1, 161 00, Praha 6, OC ŠESTKA";
-                            */
 
-                            //FLORA
-                            String companyShop = "Pobocka: Vinohradska 151, 130 00, Praha 3";
-                            String companyShop2 = "OC Atrium Flora";
+                            String companyShop = "default name";
+                            String companyShop2 = "default name 2";
+
+                            if (shopID == 1){
+                                //FLORA
+                                companyShop = "Pobocka: Vinohradska 151, 130 00, Praha 3";
+                                companyShop2 = "OC Atrium Flora";
+                            }else if(shopID == 2){
+                                //SESTKA
+                                companyShop = "Pobocka: Fajtlova 1090/1, 161 00, Praha 6, OC ŠESTKA";
+                                companyShop2 = "OC Sestka";
+                            }
+
+
+
 
                             //adding current time
                             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss ");
@@ -701,14 +673,17 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                             list.add(DataForSendToPrinterPos58.printAndFeedForward(6));
 
                             //cut pager
-                            //flora
-                            list.add(DataForSendToPrinterPos80.selectCutPagerModerAndCutPager(66,1));
 
-                            //sestka
-                            //list.add(DataForSendToPrinterPos58.creatCashboxContorlPulse(1,25,250));
 
-                            //flora
-                            list.add(DataForSendToPrinterPos80.creatCashboxContorlPulse(0,25,250));
+                            if (shopID == 1){
+                                //flora
+                                list.add(DataForSendToPrinterPos80.selectCutPagerModerAndCutPager(66,1));
+                                list.add(DataForSendToPrinterPos80.creatCashboxContorlPulse(0,25,250));
+
+                            }else if(shopID == 2){
+
+                                list.add(DataForSendToPrinterPos58.creatCashboxContorlPulse(1,25,250));
+                            }
 
                             //save the money to dbs
                             saveTransactionToDbs();

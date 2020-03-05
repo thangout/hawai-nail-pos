@@ -6,6 +6,8 @@ public class EmployeeDBS {
 
     ArrayList<Employee> employeesFlora = new ArrayList<>();
 
+    ArrayList<Employee> employeesSestka = new ArrayList<>();
+
     public EmployeeDBS() {
 
         employeesFlora.add(new Employee(201, "Dong","30128",""));
@@ -25,13 +27,29 @@ public class EmployeeDBS {
 
         employeesFlora.add(new Employee(213, "Nhung","26301",""));
         employeesFlora.add(new Employee(214, "Chi","16184",""));
+        employeesFlora.add(new Employee(215, "Hang","08984",""));
 
-        //employeesFlora.add(new Employee(999999, "TEST","11111",""));
+
+        employeesSestka.add(new Employee(301, "Ha","22425",""));
+        employeesSestka.add(new Employee(302, "Nhan","17797",""));
+        employeesSestka.add(new Employee(303, "Tomas","06081",""));
+        employeesSestka.add(new Employee(304, "Quyen","29718",""));
+        employeesSestka.add(new Employee(305, "Loan","12129",""));
+        employeesSestka.add(new Employee(306, "Nhung","23982",""));
+
+
+
+
+        //employeesSestka.add(new Employee(999999, "TEST","11111",""));
 
 
     }
 
     public ArrayList<Employee> getEmployeesFlora() {
         return employeesFlora;
+    }
+
+    public ArrayList<Employee> getEmployeesSestka() {
+        return employeesSestka;
     }
 }

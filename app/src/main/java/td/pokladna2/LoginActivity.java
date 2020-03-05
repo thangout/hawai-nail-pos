@@ -26,7 +26,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         employeeDBS = new EmployeeDBS();
-        employees = employeeDBS.getEmployeesFlora();
+
+
+        //employees = employeeDBS.getEmployeesFlora();
+        employees = employeeDBS.getEmployeesSestka();
 
 
         initListeners();

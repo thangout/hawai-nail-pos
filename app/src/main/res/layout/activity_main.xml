@@ -17,26 +17,6 @@
         app:layout_constraintTop_toBottomOf="@+id/buttonPrintReciept" />
 
     <Button
-        android:id="@+id/quickPrintC"
-        android:layout_width="100dp"
-        android:layout_height="91dp"
-        android:layout_marginStart="45dp"
-        android:text="580"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/quickPrintB"
-        app:layout_constraintStart_toEndOf="@+id/quickPrintB" />
-
-    <Button
-        android:id="@+id/quickPrintD"
-        android:layout_width="100dp"
-        android:layout_height="91dp"
-        android:layout_marginStart="45dp"
-        android:text="1000"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/quickPrintC"
-        app:layout_constraintStart_toEndOf="@+id/quickPrintC" />
-
-    <Button
         android:id="@+id/noThree"
         android:layout_width="122dp"
         android:layout_height="120dp"
@@ -214,25 +194,6 @@
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/viewPrice"
         app:layout_constraintStart_toStartOf="@+id/viewPrice" />
-
-    <Button
-        android:id="@+id/quickPrintA"
-        android:layout_width="100dp"
-        android:layout_height="91dp"
-        android:text="360"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/minusButton"
-        app:layout_constraintStart_toStartOf="@+id/transSumText" />
-
-    <Button
-        android:id="@+id/quickPrintB"
-        android:layout_width="100dp"
-        android:layout_height="91dp"
-        android:layout_marginStart="45dp"
-        android:text="480"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/quickPrintA"
-        app:layout_constraintStart_toEndOf="@+id/quickPrintA" />
 
     <TextView
         android:id="@+id/employeeNameText"
