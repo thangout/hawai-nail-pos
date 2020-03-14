@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 
@@ -62,7 +63,16 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
     //set the ID of a shop that the app is installed for
     // shopID = 2 is for Sestka
     // shopID = 1 is for Flora
-    int shopID = 2;
+    int shopID = 1;
+
+
+    //use name = nailsfloratest, for test purposes
+    //Flora production
+    //String DBS_NAME = "nailsfloraprod";
+
+    //Sestka production
+    //String DBS_NAME = "nailssestkaprod";
+    String DBS_NAME = "nailsfloratest";
 
     TextView priceDisplay;
 
@@ -94,13 +104,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
     boolean isConnectedToPrinter;
 
-    //use name = nailsfloratest, for test purposes
-    //Flora production
-    //String DBS_NAME = "nailsfloraprod";
 
-    //Sestka production
-    String DBS_NAME = "nailssestkaprod";
-    //String DBS_NAME = "nailsfloratest";
 
 
     @Override
@@ -133,8 +137,15 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         setupEmployeeInfo();
 
         //comment for deployment on simulator
-        setupBT();
+        //setupBT();
 
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 300000);
     }
 
     private void setupEmployeeInfo() {

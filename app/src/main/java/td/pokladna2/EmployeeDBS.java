@@ -25,8 +25,8 @@ public class EmployeeDBS {
         employeesFlora.add(new Employee(211, "Thuy","59112",""));
         employeesFlora.add(new Employee(212, "Lich","99723",""));
 
-        employeesFlora.add(new Employee(213, "Nhung","26301",""));
-        employeesFlora.add(new Employee(214, "Chi","16184",""));
+            employeesFlora.add(new Employee(213, "Nhung","26301",""));
+            employeesFlora.add(new Employee(214, "Chi","16184",""));
         employeesFlora.add(new Employee(215, "Hang","08984",""));
 
 
@@ -36,6 +36,7 @@ public class EmployeeDBS {
         employeesSestka.add(new Employee(304, "Quyen","29718",""));
         employeesSestka.add(new Employee(305, "Loan","12129",""));
         employeesSestka.add(new Employee(306, "Nhung","23982",""));
+        employeesSestka.add(new Employee(307, "Thanh","18802",""));
 
 
 
