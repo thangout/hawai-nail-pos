@@ -31,5 +31,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     implementation files('libs/posprinterconnectandsendsdk.jar')
     implementation 'com.google.firebase:firebase-firestore:21.3.1'
+    implementation files('libs\\openeet-lite-java7-20190610-1420.jar')
 
 }

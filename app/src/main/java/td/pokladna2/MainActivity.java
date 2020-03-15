@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -47,6 +48,8 @@ import net.posprinter.service.PosprinterService;
 import net.posprinter.utils.DataForSendToPrinterPos58;
 import net.posprinter.utils.DataForSendToPrinterPos80;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -145,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
             public void run() {
                 finish();
             }
+            //5minutes
         }, 300000);
     }
 
@@ -737,6 +741,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         decorationPrices.clear();
         halfPriceIndex = 0;
 
+        eetCall();
+
     };
 
     public void addNumberToPriceDisplay(String inputNo){
@@ -907,6 +913,41 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
     private void sendDialogDataToActivity(String data) {
         Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void eetCall(){
+
+        EET eetModule = new EET();
+
+        AssetManager am = getAssets();
+
+        InputStream cert = null;
+        InputStream jks = null;
+
+        try {
+            cert = am.open("EET_CA1_Playground-CZ1212121218.p12");
+            jks = am.open("newbks");
+
+            String message = "nic se nestalo";
+
+            if (cert != null){
+                //message = EET.simpleRegistrationProcessTest(cert);
+                InputStream[] certs = new InputStream[2];
+                certs[0] = cert;
+                certs[1] = jks;
+                eetModule.execute(certs);
+            }
+
+            sendDialogDataToActivity(message);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     @Override
