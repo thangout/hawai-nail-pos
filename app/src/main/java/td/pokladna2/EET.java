@@ -1,6 +1,8 @@
 package td.pokladna2;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.view.View;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,79 +14,33 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
 
-import eet.EetRegisterRequest;
-import eet.EetTrustManager;
+//import eet.EetRegisterRequest;
+
+import openeet.lite.EetRegisterRequest;
 
 import static eet.EetRegisterRequest.loadStream;
 
 
 public class EET extends AsyncTask<InputStream, Void, String> {
 
-    public static void main(String[] args) {
-        try {
-            // TODO code application logic here
+    private View view;
 
+    private MainActivity activity;
 
-        } catch (Exception ex) {
-            //Logger.getLogger(EetFirstTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public EET(View view) {
+        this.view = view;
     }
 
-
-    public static String simpleRegistrationProcessTest(InputStream cert) throws MalformedURLException, IOException, Exception{
-        //set minimal business data & certificate with key loaded from pkcs12 file
-        EetRegisterRequest request=EetRegisterRequest.builder()
-                .dic_popl("CZ1212121218")
-                .id_provoz("1")
-                .id_pokl("POKLADNA01")
-                .porad_cis("1")
-                .dat_trzby("2020-02-19T19:43:28+02:00")
-                .celk_trzba(-20000.0)
-                .rezim(0)
-                //.pkcs12(loadStream(EET.class.getResourceAsStream( "/EET_CA1_Playground-CZ1212121218.p12")))
-                .pkcs12(loadStream(cert))
-                .pkcs12password("eet")
-                .build();
-
-        //for receipt printing in online mode
-        String bkp=request.formatBkp();
-        //assertNotNull(bkp);
-
-        //for receipt printing in offline mode
-        String pkp=request.formatPkp();
-        //assertNotNull(pkp);
-        //the receipt can be now stored for offline processing
-        //System.out.println(pkp);
-
-        //try send
-        String requestBody=request.generateSoapRequest();
-        //assertNotNull(requestBody);
-
-        String response=request.sendRequest(requestBody, new URL("https://pg.eet.cz:443/eet/services/EETServiceSOAP/v3"));
-        System.out.println(response);
-        //extract FIK
-        //assertNotNull(response);
-        //assertTrue(response.contains("Potvrzeni fik="));
-
-        String message = "";
-
-        if (response.contains("Potvrzeni fik=")) {
-            message = "EET PROBEHLO OK MAME FIK";
-            System.out.println("EET PROBEHLO OK MAME FIK");
-        }else{
-            message = "EET NEPROBEHLO";
-            System.out.println("EET NEPROBEHLO");
-        }
-
-        return message;
-        //ready to print online receipt
+    public EET(MainActivity activity) {
+        this.activity = activity;
     }
 
     @Override
     protected String doInBackground(InputStream... inputStreams){
 
-        InputStream cert = inputStreams[0];
+        //Employee certificate
 
+        InputStream cert = inputStreams[0];
         EetRegisterRequest request= null;
 
         //custom keystore
@@ -148,23 +104,30 @@ public class EET extends AsyncTask<InputStream, Void, String> {
         //assertTrue(response.contains("Potvrzeni fik="));
 
         String message = "";
+        String fik = "";
 
         if (response != null){
             if (response.contains("Potvrzeni fik=")) {
                 message = "EET PROBEHLO OK MAME FIK";
                 System.out.println("EET PROBEHLO OK MAME FIK");
+                //extracting the text
+                int startIndex = response.indexOf("fik=");
+                fik = response.substring(startIndex+5, startIndex + 39 + 5);
             }else{
                 message = "EET NEPROBEHLO";
                 System.out.println("EET NEPROBEHLO");
+                fik = "EET NEPROBEHLO";
             }
         }
 
 
-        return message;
+        return fik;
         //ready to print online receipt
     }
 
     protected void onPostExecute(String result) {
         System.out.println(result);
+        activity.showSnackBar(result);
+
     }
 }

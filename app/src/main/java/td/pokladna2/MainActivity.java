@@ -918,7 +918,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
     private void eetCall(){
 
-        EET eetModule = new EET();
+        //EET eetModule = new EET(findViewById(R.id.content));
+        EET eetModule = new EET(this);
 
         AssetManager am = getAssets();
 
@@ -939,7 +940,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                 eetModule.execute(certs);
             }
 
-            sendDialogDataToActivity(message);
+            showSnackBar("Starting EET ");
 
         } catch (IOException e) {
             e.printStackTrace();
