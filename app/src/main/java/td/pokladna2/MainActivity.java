@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
     //String DBS_NAME = "nailssestkaprod";
     String DBS_NAME = "nailsfloratest";
 
+    String terminalId = "Pokladna001";
+
     TextView priceDisplay;
 
     TextView calcOperationDisplay;
@@ -239,7 +241,6 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                 transactionSumText.setText(String.valueOf(transactionSum));
             }
         });
-
 
     }
 
@@ -948,7 +949,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
             if (cert != null){
 
-                EetTaskParams params = new EetTaskParams(220,emp.getDic(),cert,jks,emp.getCertificatePassword());
+                EetTaskParams params = new EetTaskParams(220,emp.getDic(),cert,jks,emp.getCertificatePassword(),emp.getShopId(),terminalId);
                 EetTaskParams[] eetParams = {params};
                 eetModule.execute(eetParams);
             }

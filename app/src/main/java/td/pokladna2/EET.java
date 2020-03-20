@@ -12,6 +12,9 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 
 //import eet.EetRegisterRequest;
@@ -44,7 +47,8 @@ public class EET extends AsyncTask<EetTaskParams, Void, String> {
         String dic = params[0].getDic();
         double totalSum = params[0].getTotalSum();
         String pkcsPassworkd = params[0].getPkcsPassword();
-
+        String shopId = params[0].getShopId();
+        String terminalId = params[0].getTerminalId();
 
         EetRegisterRequest request= null;
 
@@ -69,13 +73,12 @@ public class EET extends AsyncTask<EetTaskParams, Void, String> {
         try {
             request = EetRegisterRequest.builder()
                     .dic_popl(dic)
-                    .id_provoz("1")
-                    .id_pokl("POKLADNA01")
-                    .porad_cis("1")
-                    .dat_trzby("2020-02-19T19:43:28+02:00")
+                    .id_provoz(shopId)
+                    .id_pokl(terminalId)
+                    .porad_cis(getOrderNumber())
+                    .dat_trzby(getCurrentTime())
                     .celk_trzba(totalSum)
                     .rezim(0)
-                    //.pkcs12(loadStream(EET.class.getResourceAsStream( "/EET_CA1_Playground-CZ1212121218.p12")))
                     .pkcs12(loadStream(cert))
                     .trustKeyStore(ks)
                     .pkcs12password(pkcsPassworkd)
@@ -136,6 +139,31 @@ public class EET extends AsyncTask<EetTaskParams, Void, String> {
     protected void onPostExecute(String result) {
         System.out.println(result);
         activity.showSnackBar(result);
+    }
 
+
+    //TODO cross check with internet time
+    private String getCurrentTime(){
+        // Input
+        Date date = new Date(System.currentTimeMillis());
+
+        SimpleDateFormat sdf;
+        sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+        sdf.setTimeZone(TimeZone.getTimeZone("CET"));
+        String text = sdf.format(date);
+        return text;
+    }
+
+    //Generates "poradove cislo", looks like date, in fact it is but its valid sequence number
+    private String getOrderNumber(){
+        // Input
+        Date date = new Date(System.currentTimeMillis());
+        // Conversion
+        SimpleDateFormat sdf;
+        sdf = new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("CET"));
+        String text = sdf.format(date);
+
+        return text;
     }
 }
