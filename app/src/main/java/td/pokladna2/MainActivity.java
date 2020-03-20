@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
     String employeeName;
     String employeeId;
 
+    EmployeeDBS employeeDBS;
+
     String[] mobileArray = {"Android"};
 
     boolean isConnectedToPrinter;
@@ -159,6 +161,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         TextView empNameText = findViewById(R.id.employeeNameText);
         empNameText.setText(employeeName);
+
+        employeeDBS = new EmployeeDBS();
 
         //TODO fetch data about the employee all his transactions
 
@@ -918,6 +922,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
     private void eetCall(){
 
+
         //EET eetModule = new EET(findViewById(R.id.content));
         EET eetModule = new EET(this);
 
@@ -926,18 +931,26 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         InputStream cert = null;
         InputStream jks = null;
 
+        Employee emp = employeeDBS.getEmployeeById(employeeId);
+
+        //check if the employee was found in DBS
+        if (emp == null){
+            showSnackBar("Employee with id " + employeeId + " wasnt found");
+            return;
+        }
+
         try {
-            cert = am.open("EET_CA1_Playground-CZ1212121218.p12");
+
+            cert = am.open(emp.getCertificateName());
             jks = am.open("newbks");
 
             String message = "nic se nestalo";
 
             if (cert != null){
-                //message = EET.simpleRegistrationProcessTest(cert);
-                InputStream[] certs = new InputStream[2];
-                certs[0] = cert;
-                certs[1] = jks;
-                eetModule.execute(certs);
+
+                EetTaskParams params = new EetTaskParams(220,emp.getDic(),cert,jks,emp.getCertificatePassword());
+                EetTaskParams[] eetParams = {params};
+                eetModule.execute(eetParams);
             }
 
             showSnackBar("Starting EET ");

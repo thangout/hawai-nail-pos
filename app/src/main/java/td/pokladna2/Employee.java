@@ -4,13 +4,24 @@ public class Employee {
     int id;
     String name;
     String password;
-    String ico;
+    String dic;
+    String certificateName;
+    String certificatePassword;
 
-    public Employee(int id, String name, String password, String ico) {
+    public Employee(int id, String name, String password, String dic) {
         this.id = id;
         this.name = name;
         this.password = password;
-        this.ico = ico;
+        this.dic = dic;
+    }
+
+    public Employee(int id, String name, String password, String dic, String certificateName, String certificatePassword) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.dic = dic;
+        this.certificateName = certificateName;
+        this.certificatePassword = certificatePassword;
     }
 
     public int getId() {
@@ -25,7 +36,15 @@ public class Employee {
         return password;
     }
 
-    public String getIco() {
-        return ico;
+    public String getDic() {
+        return dic;
+    }
+
+    public String getCertificateName() {
+        return certificateName;
+    }
+
+    public String getCertificatePassword() {
+        return certificatePassword;
     }
 }

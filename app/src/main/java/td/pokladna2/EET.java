@@ -21,7 +21,7 @@ import openeet.lite.EetRegisterRequest;
 import static eet.EetRegisterRequest.loadStream;
 
 
-public class EET extends AsyncTask<InputStream, Void, String> {
+public class EET extends AsyncTask<EetTaskParams, Void, String> {
 
     private View view;
 
@@ -36,19 +36,25 @@ public class EET extends AsyncTask<InputStream, Void, String> {
     }
 
     @Override
-    protected String doInBackground(InputStream... inputStreams){
+    protected String doInBackground(EetTaskParams... params){
 
         //Employee certificate
+        InputStream cert = params[0].getCertificate();
+        InputStream keyStore = params[0].getKeyStore();
+        String dic = params[0].getDic();
+        double totalSum = params[0].getTotalSum();
+        String pkcsPassworkd = params[0].getPkcsPassword();
 
-        InputStream cert = inputStreams[0];
+
         EetRegisterRequest request= null;
+
 
         //custom keystore
         KeyStore ks = null;
         try {
             ks = KeyStore.getInstance(KeyStore.getDefaultType());
             //ks = KeyStore.getInstance("JKS");
-            ks.load(inputStreams[1], "eeteet".toCharArray());
+            ks.load(keyStore, "eeteet".toCharArray());
         } catch (KeyStoreException e) {
             e.printStackTrace();
         } catch (CertificateException e) {
@@ -62,17 +68,17 @@ public class EET extends AsyncTask<InputStream, Void, String> {
 
         try {
             request = EetRegisterRequest.builder()
-                    .dic_popl("CZ1212121218")
+                    .dic_popl(dic)
                     .id_provoz("1")
                     .id_pokl("POKLADNA01")
                     .porad_cis("1")
                     .dat_trzby("2020-02-19T19:43:28+02:00")
-                    .celk_trzba(-20000.0)
+                    .celk_trzba(totalSum)
                     .rezim(0)
                     //.pkcs12(loadStream(EET.class.getResourceAsStream( "/EET_CA1_Playground-CZ1212121218.p12")))
                     .pkcs12(loadStream(cert))
                     .trustKeyStore(ks)
-                    .pkcs12password("eet")
+                    .pkcs12password(pkcsPassworkd)
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,10 +86,12 @@ public class EET extends AsyncTask<InputStream, Void, String> {
 
         //for receipt printing in online mode
         String bkp=request.formatBkp();
+        System.out.println("BKB je dlouhe " + bkp.length());
         //assertNotNull(bkp);
 
         //for receipt printing in offline mode
         String pkp=request.formatPkp();
+        System.out.println("pkp je dlouhe " + pkp.length());
         //assertNotNull(pkp);
         //the receipt can be now stored for offline processing
         //System.out.println(pkp);

@@ -10,9 +10,9 @@ public class EmployeeDBS {
 
     public EmployeeDBS() {
 
-        employeesFlora.add(new Employee(201, "Dong","30128",""));
-        employeesFlora.add(new Employee(202, "Quang","20433",""));
-        employeesFlora.add(new Employee(203, "Van","65113",""));
+        employeesFlora.add(new Employee(201, "Dong","30128","CZ1212121218","EET_CA1_Playground-CZ1212121218.p12","eet"));
+        employeesFlora.add(new Employee(202, "Quang","20433","CZ683555118", "EET_CA1_Playground-CZ683555118.p12","eet"));
+        employeesFlora.add(new Employee(203, "Van","65113","CZ00000019","EET_CA1_Playground-CZ00000019.p12","eet"));
         employeesFlora.add(new Employee(204, "Quynh Anh","10389",""));
 
         employeesFlora.add(new Employee(205, "Ngan","60182",""));
@@ -52,5 +52,26 @@ public class EmployeeDBS {
 
     public ArrayList<Employee> getEmployeesSestka() {
         return employeesSestka;
+    }
+
+    public Employee getEmployeeById(String id){
+        Employee returnEmp = null;
+
+        int convertedId = Integer.valueOf(id);
+
+        for(Employee emp: getEmployeesFlora()){
+            if (emp.getId() == convertedId){
+                returnEmp = emp;
+            }
+        };
+
+        for(Employee emp: getEmployeesSestka()){
+            if (emp.getId() == convertedId){
+                returnEmp = emp;
+            }
+        };
+
+
+        return returnEmp;
     }
 }
