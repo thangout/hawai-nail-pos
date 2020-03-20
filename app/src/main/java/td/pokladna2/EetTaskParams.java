@@ -64,4 +64,5 @@ public class EetTaskParams {
     public String getTerminalId() {
         return terminalId;
     }
+
 }

@@ -593,9 +593,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                     @Override
                     public List<byte[]> processDataBeforeSend() {
 
-
                         List<byte[]> list=new ArrayList<byte[]>();
-
 
                         if (false){
                         }else {
@@ -623,8 +621,6 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                                 companyShop = "Pobocka: Fajtlova 1090/1, 161 00, Praha 6, OC ŠESTKA";
                                 companyShop2 = "OC Sestka";
                             }
-
-
 
 
                             //adding current time
@@ -972,6 +968,173 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         if (conn != null) {
             unbindService(conn);
         }
+    }
+
+    public void printEetReceipt(ReceiptDTO reciept) {
+
+        showSnackBar("Printing EET Receipt");
+        final double totalSum = reciept.getTotalSum();
+        final String terminalId = reciept.getTerminalId();
+        final String shopId = reciept.getShopId();
+        final String dateTime = reciept.getDateTime();
+        String dic = reciept.getDic();
+        final String receiptId = reciept.getReceiptId();
+        final String FIK = reciept.getFIK();
+        final String BKP = reciept.getBKP();
+        final String PKP = reciept.getPKP();
+
+
+        if (!isConnectedToPrinter) return;
+
+        binder.writeDataByYouself(
+                new UiExecute() {
+                    @Override
+                    public void onsucess() {
+                        // when printing is successful callback
+                        setZeroPriceDisplay();
+                    }
+
+                    @Override
+                    public void onfailed() {
+
+                    }
+                }, new ProcessData() {
+                    @Override
+                    public List<byte[]> processDataBeforeSend() {
+
+                        List<byte[]> list=new ArrayList<byte[]>();
+                            //initialize the printer
+//                          list.add( DataForSendToPrinterPos58.initializePrinter());
+                            list.add(DataForSendToPrinterPos58.initializePrinter());
+                            list.add(DataForSendToPrinterPos58.selectCharacterCodePage(6));
+                            //
+                            list.add(DataForSendToPrinterPos58.selectAlignment(1)); //center
+
+
+                            String companyHeader = "EURO Nails.cz s.r.o.";
+                            String companyAddress = "Prazská 3/5, 268 01, Horovice";
+                            String companyID = "IC: 27868648, DIC: CZ27868648";
+
+                            String companyShop = "default name";
+                            String companyShop2 = "default name 2";
+
+                            if (shopID == 1){
+                                //FLORA
+                                companyShop = "Pobocka: Vinohradska 151, 130 00, Praha 3";
+                                companyShop2 = "OC Atrium Flora";
+                            }else if(shopID == 2){
+                                //SESTKA
+                                companyShop = "Pobocka: Fajtlova 1090/1, 161 00, Praha 6, OC ŠESTKA";
+                                companyShop2 = "OC Sestka";
+                            }
+
+                            String datePrinted = "Datum a cas : " + dateTime;
+
+                            //id of logged in employee
+                            String employeeIdReciept = "Kod: " + employeeId;
+
+                            String toPrintShopId = "Provozovna: " + shopId;
+                            String toPrintTerminalId = "Pokladna: " + terminalId;
+                            String toPrintReceiptId = "Cislo uctenky " + receiptId;
+
+                            String divider = "------------------";
+
+                            ArrayList<String> headerList = new ArrayList<String>();
+
+                            headerList.add(companyHeader);
+                            headerList.add(companyAddress);
+                            headerList.add(companyID);
+                            headerList.add(companyShop);
+                            headerList.add(companyShop2);
+                            headerList.add(datePrinted);
+                            headerList.add(employeeIdReciept);
+                            headerList.add(toPrintShopId);
+                            headerList.add(toPrintTerminalId);
+                            headerList.add(toPrintReceiptId);
+                            headerList.add(divider);
+
+                            for(String str : headerList){
+                                list.add(StringUtils.strTobytes(str));
+                                list.add(DataForSendToPrinterPos58.printAndFeedLine());
+                            }
+
+                            list.add(DataForSendToPrinterPos58.selectAlignment(0)); //left
+
+                            //here we add each price of a service
+
+                            String[] eachPrice = calcOperationDisplay.getText().toString().split("\\+");
+
+                            for (String tmpPrice : eachPrice){
+                                byte[] basePrice = StringUtils.strTobytes("Sluzba " + tmpPrice + ",- Kc");
+                                list.add(basePrice);
+                                list.add(DataForSendToPrinterPos58.printAndFeedLine());
+                            }
+
+
+
+                            byte[] hr = StringUtils.strTobytes("===============================");
+                            list.add(hr);
+                            list.add(DataForSendToPrinterPos58.printAndFeedLine());
+
+
+                            list.add(DataForSendToPrinterPos58.selectCharacterSize(1));
+
+
+                            byte[] totalPriceByte = StringUtils.strTobytes("Celková cena: " + totalSum + ",- Kc");
+                            list.add(DataForSendToPrinterPos58.selectAlignment(0)); //center
+                            list.add(totalPriceByte);
+
+                            list.add(DataForSendToPrinterPos58.printAndFeedLine());
+                            list.add(DataForSendToPrinterPos58.selectCharacterSize(0));
+                            list.add(hr);
+
+                            //bellow margin so the text is above the cut line
+                            list.add(DataForSendToPrinterPos58.selectAlignment(1)); //center
+                            list.add(DataForSendToPrinterPos58.printAndFeedForward(2));
+
+                            list.add(StringUtils.strTobytes("7 dni zaruka na nase sluzby"));
+                            list.add(DataForSendToPrinterPos58.printAndFeedForward(2));
+                            list.add(StringUtils.strTobytes("*** Dekujeme za Vasi navstevu ***"));
+                            list.add(DataForSendToPrinterPos58.printAndFeedForward(6));
+
+                            // EET DATA
+                            //cut pager
+
+                            ArrayList<String> eetStrings = new ArrayList<String>();
+
+                            headerList.add("FIK=" + FIK);
+                            headerList.add("BKP=" + BKP);
+
+                            //TODO Print only in offline mode thus implement offline mode
+                            //headerList.add("PKP=" + PKP);
+
+
+                            for(String str : eetStrings){
+                                list.add(StringUtils.strTobytes(str));
+                                list.add(DataForSendToPrinterPos58.printAndFeedLine());
+                            }
+
+
+
+                            if (shopID == 1){
+                                //flora
+                                list.add(DataForSendToPrinterPos80.selectCutPagerModerAndCutPager(66,1));
+                                list.add(DataForSendToPrinterPos80.creatCashboxContorlPulse(0,25,250));
+
+                            }else if(shopID == 2){
+
+                                list.add(DataForSendToPrinterPos58.creatCashboxContorlPulse(1,25,250));
+                            }
+
+                            //save the money to dbs
+                            //saveTransactionToDbs();
+
+                            //finish();
+                            //MainActivity.this.finish();
+
+                            return list;
+                    }
+                });
     }
 }
 

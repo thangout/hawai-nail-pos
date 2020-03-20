@@ -1,12 +1,10 @@
 package td.pokladna2;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -24,7 +22,7 @@ import openeet.lite.EetRegisterRequest;
 import static eet.EetRegisterRequest.loadStream;
 
 
-public class EET extends AsyncTask<EetTaskParams, Void, String> {
+public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
 
     private View view;
 
@@ -39,7 +37,7 @@ public class EET extends AsyncTask<EetTaskParams, Void, String> {
     }
 
     @Override
-    protected String doInBackground(EetTaskParams... params){
+    protected ReceiptDTO doInBackground(EetTaskParams... params){
 
         //Employee certificate
         InputStream cert = params[0].getCertificate();
@@ -49,6 +47,9 @@ public class EET extends AsyncTask<EetTaskParams, Void, String> {
         String pkcsPassworkd = params[0].getPkcsPassword();
         String shopId = params[0].getShopId();
         String terminalId = params[0].getTerminalId();
+
+        String currentTime = getCurrentTime();
+        String receiptId = getReceiptId();
 
         EetRegisterRequest request= null;
 
@@ -75,8 +76,8 @@ public class EET extends AsyncTask<EetTaskParams, Void, String> {
                     .dic_popl(dic)
                     .id_provoz(shopId)
                     .id_pokl(terminalId)
-                    .porad_cis(getOrderNumber())
-                    .dat_trzby(getCurrentTime())
+                    .porad_cis(receiptId)
+                    .dat_trzby(currentTime)
                     .celk_trzba(totalSum)
                     .rezim(0)
                     .pkcs12(loadStream(cert))
@@ -132,13 +133,25 @@ public class EET extends AsyncTask<EetTaskParams, Void, String> {
         }
 
 
-        return fik;
+        ReceiptDTO newReceiept = ReceiptDTO.Builder.newInstance()
+                .setTotalSum(totalSum)
+                .setTerminalId(terminalId)
+                .setShopId(shopId)
+                .setDateTime(currentTime)
+                .setDic(dic)
+                .setReceiptId(receiptId)
+                .setFIK(fik)
+                .setBKP(bkp)
+                .setPKP(pkp)
+                .build();
+
+        return newReceiept;
         //ready to print online receipt
     }
 
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(ReceiptDTO result) {
         System.out.println(result);
-        activity.showSnackBar(result);
+        activity.printEetReceipt(result);
     }
 
 
@@ -155,7 +168,7 @@ public class EET extends AsyncTask<EetTaskParams, Void, String> {
     }
 
     //Generates "poradove cislo", looks like date, in fact it is but its valid sequence number
-    private String getOrderNumber(){
+    private String getReceiptId(){
         // Input
         Date date = new Date(System.currentTimeMillis());
         // Conversion
