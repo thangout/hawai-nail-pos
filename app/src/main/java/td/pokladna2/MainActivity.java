@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
     //set the ID of a shop that the app is installed for
     // shopID = 2 is for Sestka
     // shopID = 1 is for Flora
-    int shopID = 1;
+    int shopID = 2;
 
 
     //use name = nailsfloratest, for test purposes
@@ -144,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         setupEmployeeInfo();
 
         //comment for deployment on simulator
-        //setupBT();
+        setupBT();
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -414,7 +416,9 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
                 if (priceDisplay.getText().equals("0")) return;
 
-                printReceipt();
+                //TODO make obvious where its being printed
+                //printReceipt();
+                eetCall();
             }
         });
 
@@ -741,9 +745,6 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         calcOperationDisplay.setText("0");
         decorationPrices.clear();
         halfPriceIndex = 0;
-
-        eetCall();
-
     };
 
     public void addNumberToPriceDisplay(String inputNo){
@@ -945,12 +946,12 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
             if (cert != null){
 
-                EetTaskParams params = new EetTaskParams(220,emp.getDic(),cert,jks,emp.getCertificatePassword(),emp.getShopId(),terminalId);
+                EetTaskParams params = new EetTaskParams(Double.valueOf(getCurrentPrice()),emp.getDic(),cert,jks,emp.getCertificatePassword(),emp.getShopId(),terminalId);
                 EetTaskParams[] eetParams = {params};
                 eetModule.execute(eetParams);
             }
 
-            showSnackBar("Starting EET ");
+            showSnackBar("Starting EET operation");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1028,14 +1029,15 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                                 companyShop2 = "OC Sestka";
                             }
 
-                            String datePrinted = "Datum a cas : " + dateTime;
+                            String dateTimeHeadline = "Datum a cas:";
+                            String datePrinted = dateTime;
 
                             //id of logged in employee
                             String employeeIdReciept = "Kod: " + employeeId;
 
                             String toPrintShopId = "Provozovna: " + shopId;
                             String toPrintTerminalId = "Pokladna: " + terminalId;
-                            String toPrintReceiptId = "Cislo uctenky " + receiptId;
+                            String toPrintReceiptId = "Cislo uctenky: " + receiptId;
 
                             String divider = "------------------";
 
@@ -1046,6 +1048,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                             headerList.add(companyID);
                             headerList.add(companyShop);
                             headerList.add(companyShop2);
+                            headerList.add(dateTimeHeadline);
                             headerList.add(datePrinted);
                             headerList.add(employeeIdReciept);
                             headerList.add(toPrintShopId);
@@ -1094,26 +1097,26 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
                             list.add(StringUtils.strTobytes("7 dni zaruka na nase sluzby"));
                             list.add(DataForSendToPrinterPos58.printAndFeedForward(2));
-                            list.add(StringUtils.strTobytes("*** Dekujeme za Vasi navstevu ***"));
-                            list.add(DataForSendToPrinterPos58.printAndFeedForward(6));
+                            list.add(StringUtils.strTobytes("* Dekujeme za Vasi navstevu *"));
+                            list.add(DataForSendToPrinterPos58.printAndFeedForward(2));
 
                             // EET DATA
                             //cut pager
 
                             ArrayList<String> eetStrings = new ArrayList<String>();
 
-                            headerList.add("FIK=" + FIK);
-                            headerList.add("BKP=" + BKP);
+                            eetStrings.add("FIK=" + FIK);
+                            eetStrings.add("BKP=" + BKP);
 
                             //TODO Print only in offline mode thus implement offline mode
                             //headerList.add("PKP=" + PKP);
-
 
                             for(String str : eetStrings){
                                 list.add(StringUtils.strTobytes(str));
                                 list.add(DataForSendToPrinterPos58.printAndFeedLine());
                             }
 
+                            list.add(DataForSendToPrinterPos58.printAndFeedForward(6));
 
 
                             if (shopID == 1){
@@ -1136,6 +1139,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                     }
                 });
     }
+
+
 }
 
 

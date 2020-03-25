@@ -1,5 +1,8 @@
 package td.pokladna2;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.view.View;
 
@@ -38,6 +41,11 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
 
     @Override
     protected ReceiptDTO doInBackground(EetTaskParams... params){
+
+        //check for internet connection
+        if (!isNetworkAvailable()){
+            return null;
+        }
 
         //Employee certificate
         InputStream cert = params[0].getCertificate();
@@ -150,6 +158,10 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
     }
 
     protected void onPostExecute(ReceiptDTO result) {
+        if (result == null){
+            activity.showSnackBar("NO INTERNET CONNECTION");
+            return;
+        }
         System.out.println(result);
         activity.printEetReceipt(result);
     }
@@ -161,7 +173,7 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
         Date date = new Date(System.currentTimeMillis());
 
         SimpleDateFormat sdf;
-        sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+        sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
         sdf.setTimeZone(TimeZone.getTimeZone("CET"));
         String text = sdf.format(date);
         return text;
@@ -173,10 +185,17 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
         Date date = new Date(System.currentTimeMillis());
         // Conversion
         SimpleDateFormat sdf;
-        sdf = new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss");
+        sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         sdf.setTimeZone(TimeZone.getTimeZone("CET"));
         String text = sdf.format(date);
 
         return text;
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
