@@ -1,22 +1,27 @@
 package td.pokladna2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import td.pokladna2.EmployeeDatabase.Employee;
+import td.pokladna2.EmployeeDatabase.EmployeeDBS;
+import td.pokladna2.EmployeeDatabase.ManageEmployeesDatabaseActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.WindowManager;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
-    ArrayList<Employee> employees;
+    List<Employee> employees;
 
     EmployeeDBS employeeDBS;
 
@@ -25,15 +30,29 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        employeeDBS = new EmployeeDBS();
+        EmployeeDBS.init(this);
+        employeeDBS = EmployeeDBS.getInstance();
 
-
-        employees = employeeDBS.getEmployeesFlora();
+        //employees = employeeDBS.getEmployeesFlora();
         //employees = employeeDBS.getEmployeesSestka();
-
+        employees = employeeDBS.getAllEmployees();
 
         initListeners();
 
+        setupButtons();
+    }
+
+    private void setupButtons() {
+
+        Button adminButton = findViewById(R.id.adminButton);
+
+        adminButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ManageEmployeesDatabaseActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initListeners() {
@@ -99,6 +118,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        employees = employeeDBS.getAllEmployees();
 
         final EditText passwordText = findViewById(R.id.passwordText);
         passwordText.requestFocus();

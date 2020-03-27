@@ -196,7 +196,7 @@
         app:layout_constraintStart_toStartOf="@+id/viewPrice" />
 
     <TextView
-        android:id="@+id/employeeNameText"
+        android:id="@+id/addEmpNameText"
         android:layout_width="252dp"
         android:layout_height="60dp"
         android:layout_marginStart="108dp"

@@ -1,15 +1,37 @@
-package td.pokladna2;
+package td.pokladna2.EmployeeDatabase;
+
+import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import td.pokladna2.MainActivity;
+
 
 public class EmployeeDBS {
 
-    ArrayList<Employee> employeesFlora = new ArrayList<>();
+    private static EmployeeDBS instance;
 
+    private static EmployeeDatabase db;
+
+    private Context context;
+
+    ArrayList<Employee> employeesFlora = new ArrayList<>();
     ArrayList<Employee> employeesSestka = new ArrayList<>();
 
-    public EmployeeDBS() {
+    public EmployeeDBS(Context context) {
+        this.context = context;
+        createInCodeDBS();
+    }
 
+    public static EmployeeDBS getInstance() {
+        return instance;
+    }
+
+    private void createInCodeDBS(){
         employeesFlora.add(new Employee(201, "Dong","30128","CZ1212121218","EET_CA1_Playground-CZ1212121218.p12","eet","1"));
         employeesFlora.add(new Employee(202, "Quang","20433","CZ683555118", "EET_CA1_Playground-CZ683555118.p12","eet", "1"));
         employeesFlora.add(new Employee(203, "Van","65113","CZ00000019","EET_CA1_Playground-CZ00000019.p12","eet", "1"));
@@ -25,8 +47,8 @@ public class EmployeeDBS {
         employeesFlora.add(new Employee(211, "Thuy","59112",""));
         employeesFlora.add(new Employee(212, "Lich","99723",""));
 
-            employeesFlora.add(new Employee(213, "Nhung","26301",""));
-            employeesFlora.add(new Employee(214, "Chi","16184",""));
+        employeesFlora.add(new Employee(213, "Nhung","26301",""));
+        employeesFlora.add(new Employee(214, "Chi","16184",""));
         employeesFlora.add(new Employee(215, "Hang","08984",""));
 
 
@@ -37,14 +59,14 @@ public class EmployeeDBS {
         employeesSestka.add(new Employee(305, "Loan","12129",""));
         employeesSestka.add(new Employee(306, "Nhung","23982",""));
         employeesSestka.add(new Employee(307, "Thanh","18802",""));
-
-
-
-
         //employeesSestka.add(new Employee(999999, "TEST","11111",""));
 
-
     }
+
+    public void saveEmployee(Employee employee){
+        db.employeeDAO().insertEmployee(employee);
+    }
+
 
     public ArrayList<Employee> getEmployeesFlora() {
         return employeesFlora;
@@ -55,7 +77,8 @@ public class EmployeeDBS {
     }
 
     public Employee getEmployeeById(String id){
-        Employee returnEmp = null;
+
+        /* Employee returnEmp = null;
 
         int convertedId = Integer.valueOf(id);
 
@@ -69,9 +92,24 @@ public class EmployeeDBS {
             if (emp.getId() == convertedId){
                 returnEmp = emp;
             }
-        };
+        }; */
 
+        return db.employeeDAO().findById(Integer.valueOf(id));
+    }
 
-        return returnEmp;
+    public static void init(Context context) {
+        if (instance == null) {
+            context = context.getApplicationContext();
+            db = Room.databaseBuilder(context, EmployeeDatabase.class, "employees").allowMainThreadQueries().build();
+            instance = new EmployeeDBS(context);
+        }
+    }
+
+    public List<Employee> getAllEmployees() {
+        return db.employeeDAO().getAll();
+    }
+
+    public void updateEmployee(Employee employee){
+        db.employeeDAO().updateEmployee(employee);
     }
 }

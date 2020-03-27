@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EmployeeDatabase.AddEmployee">
+
+    <EditText
+        android:id="@+id/addEmpIdText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="64dp"
+        android:ems="10"
+        android:hint="ID "
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ID"
+        app:layout_constraintBottom_toTopOf="@+id/addEmpIdText"
+        app:layout_constraintStart_toStartOf="@+id/addEmpIdText" />
+
+    <EditText
+        android:id="@+id/addEmpNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/addEmpIdText"
+        app:layout_constraintTop_toBottomOf="@+id/addEmpIdText" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        app:layout_constraintBottom_toTopOf="@+id/addEmpNameText"
+        app:layout_constraintStart_toStartOf="@+id/addEmpNameText" />
+
+    <EditText
+        android:id="@+id/addEmpPasswordText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:ems="10"
+        android:hint="Password "
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/addEmpNameText"
+        app:layout_constraintTop_toBottomOf="@+id/addEmpNameText" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password"
+        app:layout_constraintBottom_toTopOf="@+id/addEmpPasswordText"
+        app:layout_constraintStart_toStartOf="@+id/addEmpPasswordText" />
+
+    <EditText
+        android:id="@+id/addEmpDicText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:ems="10"
+        android:hint="DIC"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/addEmpPasswordText"
+        app:layout_constraintTop_toBottomOf="@+id/addEmpPasswordText" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DIC"
+        app:layout_constraintBottom_toTopOf="@+id/addEmpDicText"
+        app:layout_constraintStart_toStartOf="@+id/addEmpDicText" />
+
+    <EditText
+        android:id="@+id/addEmpCertificateNameText"
+        android:layout_width="374dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="56dp"
+        android:ems="10"
+        android:hint="Choose certificate"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/addEmpDicText"
+        app:layout_constraintTop_toBottomOf="@+id/addEmpDicText" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Certificate name"
+        app:layout_constraintBottom_toTopOf="@+id/addEmpCertificateNameText"
+        app:layout_constraintStart_toStartOf="@+id/addEmpCertificateNameText" />
+
+    <Button
+        android:id="@+id/openFileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="Pick File"
+        app:layout_constraintBottom_toBottomOf="@+id/addEmpCertificateNameText"
+        app:layout_constraintStart_toEndOf="@+id/addEmpCertificateNameText" />
+
+    <EditText
+        android:id="@+id/addEmpCertificatePasswordText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
+        android:ems="10"
+        android:hint="Certificate password"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/addEmpCertificateNameText"
+        app:layout_constraintTop_toBottomOf="@+id/addEmpCertificateNameText" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Certificate password"
+        app:layout_constraintBottom_toTopOf="@+id/addEmpCertificatePasswordText"
+        app:layout_constraintStart_toStartOf="@+id/addEmpCertificatePasswordText" />
+
+    <EditText
+        android:id="@+id/addEmpShopIdText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:ems="10"
+        android:hint="Shop ID"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/addEmpCertificatePasswordText"
+        app:layout_constraintTop_toBottomOf="@+id/addEmpCertificatePasswordText" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shop ID "
+        app:layout_constraintBottom_toTopOf="@+id/addEmpShopIdText"
+        app:layout_constraintStart_toStartOf="@+id/addEmpShopIdText" />
+
+    <Button
+        android:id="@+id/saveEmployeeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="Save"
+        app:layout_constraintStart_toStartOf="@+id/addEmpShopIdText"
+        app:layout_constraintTop_toBottomOf="@+id/addEmpShopIdText" />
+
+    <Button
+        android:id="@+id/deleteEmployeeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:text="Delete"
+        app:layout_constraintBottom_toBottomOf="@+id/saveEmployeeButton"
+        app:layout_constraintStart_toEndOf="@+id/saveEmployeeButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

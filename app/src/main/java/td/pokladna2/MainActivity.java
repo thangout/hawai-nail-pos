@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -18,12 +16,14 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import td.pokladna2.EmployeeDatabase.Employee;
+import td.pokladna2.EmployeeDatabase.EmployeeDBS;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +50,8 @@ import net.posprinter.service.PosprinterService;
 import net.posprinter.utils.DataForSendToPrinterPos58;
 import net.posprinter.utils.DataForSendToPrinterPos80;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -146,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         setupEmployeeInfo();
 
         //comment for deployment on simulator
-        setupBT();
+        //setupBT();
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -163,10 +165,13 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         employeeName = intent.getStringExtra("name");
         employeeId = intent.getStringExtra("id");
 
-        TextView empNameText = findViewById(R.id.employeeNameText);
+        TextView empNameText = findViewById(R.id.addEmpNameText);
         empNameText.setText(employeeName);
 
-        employeeDBS = new EmployeeDBS();
+
+        EmployeeDBS.init(this);
+        employeeDBS = EmployeeDBS.getInstance();
+
 
         //TODO fetch data about the employee all his transactions
 
@@ -939,7 +944,18 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         try {
 
-            cert = am.open(emp.getCertificateName());
+            //cert = am.open(emp.getCertificateName());
+            //TODO the files is not found exception
+
+            //this doesnt work
+            //cert = new FileInputStream(new File(emp.getCertificateName()));
+            //String filePath = getApplicationContext().getExternalFilesDir(null);
+
+            //File appSpecificExternalDir = new File(getApplicationContext().getExternalFilesDir(null), emp.getCertificateName());
+
+            File file = new File(emp.getCertificateName());
+            cert = new FileInputStream(file);
+
             jks = am.open("newbks");
 
             String message = "nic se nestalo";
@@ -986,6 +1002,11 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
 
         if (!isConnectedToPrinter) return;
+
+        //turning off printting but want to know that it all got here
+        if (true){
+            return;
+        }
 
         binder.writeDataByYouself(
                 new UiExecute() {
