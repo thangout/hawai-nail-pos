@@ -137,12 +137,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         setupButtons();
 
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .build();
 
-        db = FirebaseFirestore.getInstance();
-        db.setFirestoreSettings(settings);
+        db = FirestoreDatabase.getInstance().FIRESTORE;
 
 
         setupEmployeeInfo();
@@ -421,8 +417,17 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
                 if (priceDisplay.getText().equals("0")) return;
 
-                //TODO make obvious where its being printed
-                //printReceipt();
+                printReceipt();
+            }
+        });
+
+        Button printEetButton = findViewById(R.id.printEetButton);
+        printEetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (priceDisplay.getText().equals("0")) return;
+
                 eetCall();
             }
         });

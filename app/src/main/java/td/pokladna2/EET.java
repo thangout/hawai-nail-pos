@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import java.io.IOException;
@@ -21,6 +22,9 @@ import java.util.TimeZone;
 //import eet.EetRegisterRequest;
 
 import openeet.lite.EetRegisterRequest;
+import td.pokladna2.EetTaskParams;
+import td.pokladna2.MainActivity;
+import td.pokladna2.ReceiptDTO;
 
 import static eet.EetRegisterRequest.loadStream;
 
@@ -109,13 +113,16 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
         //System.out.println(pkp);
 
         //try send
+        //TODO save requestBody to DBS - local and online
         String requestBody=request.generateSoapRequest();
-        //assertNotNull(requestBody);
 
+        //assertNotNull(requestBody);
         String response= null;
+
         try {
             response = request.sendRequest(requestBody, new URL("https://pg.eet.cz:443/eet/services/EETServiceSOAP/v3"));
         } catch (Exception e) {
+            Log.d("EET","The EET send had failed when sending");
             e.printStackTrace();
         }
         System.out.println(response);
