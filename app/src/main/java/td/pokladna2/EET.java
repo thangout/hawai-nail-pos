@@ -144,6 +144,7 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
                 message = "EET NEPROBEHLO";
                 System.out.println("EET NEPROBEHLO");
                 fik = "EET NEPROBEHLO";
+                Log.d("EET","The EET send had failed when sending");
             }
         }
 

@@ -1,4 +1,4 @@
-package td.pokladna2.EmployeeDatabase;
+package td.pokladna2.employeedbs;
 
 import java.util.List;
 

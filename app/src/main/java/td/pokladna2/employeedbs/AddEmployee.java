@@ -1,7 +1,8 @@
-package td.pokladna2.EmployeeDatabase;
+package td.pokladna2.employeedbs;
 
 import androidx.appcompat.app.AppCompatActivity;
 import td.pokladna2.FileUtils;
+import td.pokladna2.LocalDatabase;
 import td.pokladna2.R;
 
 import android.content.Context;
@@ -10,7 +11,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +30,8 @@ public class AddEmployee extends AppCompatActivity {
 
     boolean isUpdateState;
 
+    AppDatabase dbs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +47,14 @@ public class AddEmployee extends AppCompatActivity {
             isUpdateState = true;
         }
 
+        dbs = LocalDatabase.getInstance(getApplicationContext()).DBS;
+
         initButtons();
     }
 
     private void loadDataToView(int employeeId) {
-        EmployeeDBS.init(this);
-        Employee emp = EmployeeDBS.getInstance().getEmployeeById(String.valueOf(employeeId));
+
+        Employee emp = dbs.employeeDAO().findById(employeeId);
         TextView id = findViewById(R.id.addEmpIdText);
         TextView name = findViewById(R.id.addEmpNameText);
         TextView password = findViewById(R.id.addEmpPasswordText);
@@ -113,9 +117,9 @@ public class AddEmployee extends AppCompatActivity {
         EmployeeDBS.init(this);
 
         if (isUpdateState){
-            EmployeeDBS.getInstance().updateEmployee(employee);
+            dbs.employeeDAO().updateEmployee(employee);
         }else{
-            EmployeeDBS.getInstance().saveEmployee(employee);
+            dbs.employeeDAO().insertEmployee(employee);
         }
 
         finish();

@@ -16,8 +16,9 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import td.pokladna2.EmployeeDatabase.Employee;
-import td.pokladna2.EmployeeDatabase.EmployeeDBS;
+import td.pokladna2.employeedbs.AppDatabase;
+import td.pokladna2.employeedbs.Employee;
+import td.pokladna2.employeedbs.EmployeeDBS;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -37,7 +38,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
     ServiceConnection conn;
 
     FirebaseFirestore db;
+    AppDatabase localDB;
 
     String employeeName;
     String employeeId;
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
 
         db = FirestoreDatabase.getInstance().FIRESTORE;
+        localDB = LocalDatabase.getInstance(getApplicationContext()).DBS;
 
 
         setupEmployeeInfo();
@@ -164,9 +166,6 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         TextView empNameText = findViewById(R.id.addEmpNameText);
         empNameText.setText(employeeName);
 
-
-        EmployeeDBS.init(this);
-        employeeDBS = EmployeeDBS.getInstance();
 
 
         //TODO fetch data about the employee all his transactions
@@ -472,9 +471,17 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
             }
         });
 
+        final Button showEmployeeReceiptEetButton = findViewById(R.id.employeeEetReceiptButton);
+        showEmployeeReceiptEetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getApplicationContext(), EmployeeEetManage.class);
+                myIntent.putExtra("EMPLOYEE_ID", employeeId); //Optional parameters
+                startActivity(myIntent);
+            }
+        });
 
         Button finishMainActivityButton = findViewById(R.id.finishMainActivityButton);
-
         finishMainActivityButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -939,7 +946,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         InputStream cert = null;
         InputStream jks = null;
 
-        Employee emp = employeeDBS.getEmployeeById(employeeId);
+        Employee emp = localDB.employeeDAO().findById(Integer.valueOf(employeeId));
 
         //check if the employee was found in DBS
         if (emp == null){
@@ -952,13 +959,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
             //cert = am.open(emp.getCertificateName());
             //TODO the files is not found exception
 
-            //this doesnt work
-            //cert = new FileInputStream(new File(emp.getCertificateName()));
-            //String filePath = getApplicationContext().getExternalFilesDir(null);
-
-            //File appSpecificExternalDir = new File(getApplicationContext().getExternalFilesDir(null), emp.getCertificateName());
-
             File file = new File(emp.getCertificateName());
+
             cert = new FileInputStream(file);
 
             jks = am.open("newbks");

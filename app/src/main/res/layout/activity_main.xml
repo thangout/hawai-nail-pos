@@ -248,4 +248,13 @@
         app:layout_constraintStart_toStartOf="@+id/minusButton"
         app:layout_constraintTop_toBottomOf="@+id/minusButton" />
 
+    <Button
+        android:id="@+id/employeeEetReceiptButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:text="Show EET"
+        app:layout_constraintBottom_toBottomOf="@+id/printEetButton"
+        app:layout_constraintEnd_toStartOf="@+id/printEetButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

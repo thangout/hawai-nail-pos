@@ -1,21 +1,19 @@
-package td.pokladna2.EmployeeDatabase;
+package td.pokladna2.employeedbs;
 
 import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.room.Database;
 import androidx.room.Room;
-import androidx.room.RoomDatabase;
-import td.pokladna2.MainActivity;
+import td.pokladna2.LocalDatabase;
 
 
 public class EmployeeDBS {
 
     private static EmployeeDBS instance;
 
-    private static EmployeeDatabase db;
+    private static AppDatabase db;
 
     private Context context;
 
@@ -24,6 +22,8 @@ public class EmployeeDBS {
 
     public EmployeeDBS(Context context) {
         this.context = context;
+
+
         createInCodeDBS();
     }
 
@@ -67,7 +67,6 @@ public class EmployeeDBS {
         db.employeeDAO().insertEmployee(employee);
     }
 
-
     public ArrayList<Employee> getEmployeesFlora() {
         return employeesFlora;
     }
@@ -98,11 +97,7 @@ public class EmployeeDBS {
     }
 
     public static void init(Context context) {
-        if (instance == null) {
-            context = context.getApplicationContext();
-            db = Room.databaseBuilder(context, EmployeeDatabase.class, "employees").allowMainThreadQueries().build();
-            instance = new EmployeeDBS(context);
-        }
+        db = LocalDatabase.getInstance(context).DBS;
     }
 
     public List<Employee> getAllEmployees() {

@@ -9,7 +9,7 @@ public class FirestoreDatabase {
 
     public static FirebaseFirestore FIRESTORE;
 
-    public FirestoreDatabase() {
+    private FirestoreDatabase() {
 
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)

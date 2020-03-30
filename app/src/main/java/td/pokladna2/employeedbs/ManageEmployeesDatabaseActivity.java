@@ -1,6 +1,7 @@
-package td.pokladna2.EmployeeDatabase;
+package td.pokladna2.employeedbs;
 
 import androidx.appcompat.app.AppCompatActivity;
+import td.pokladna2.LocalDatabase;
 import td.pokladna2.R;
 
 import android.content.Intent;
@@ -11,8 +12,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import java.io.File;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,8 +53,9 @@ public class ManageEmployeesDatabaseActivity extends AppCompatActivity {
         TextView certName = null;
         TextView certPass = null;
 
-        EmployeeDBS.init(this);
-        List<Employee> employeeList = EmployeeDBS.getInstance().getAllEmployees();
+
+        AppDatabase dbs = LocalDatabase.getInstance(getApplicationContext()).DBS;
+        List<Employee> employeeList = dbs.employeeDAO().getAll();
 
         int i = 0;
         for (final Employee emp : employeeList){

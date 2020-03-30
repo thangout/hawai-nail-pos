@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".employeedbs.ManageEmployeesDatabaseActivity">
+    tools:context=".EmployeeEetManage">
 
     <TableLayout
-        android:id="@+id/employeesTable"
-        android:layout_width="605dp"
-        android:layout_height="620dp"
-        android:layout_marginTop="100dp"
+        android:id="@+id/eetReceiptTable"
+        android:layout_width="603dp"
+        android:layout_height="944dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -30,13 +29,4 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </TableLayout>
-
-    <Button
-        android:id="@+id/addEmployeeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Add employee"
-        app:layout_constraintBottom_toTopOf="@+id/employeesTable"
-        app:layout_constraintStart_toStartOf="@+id/employeesTable" />
 </androidx.constraintlayout.widget.ConstraintLayout>

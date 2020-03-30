@@ -15,8 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EmployeeDatabase.AddEmployee"></activity>
-        <activity android:name=".EmployeeDatabase.ManageEmployeesDatabaseActivity" />
+        <activity android:name=".EmployeeEetManage"></activity>
+        <activity android:name=".employeedbs.AddEmployee" />
+        <activity android:name=".employeedbs.ManageEmployeesDatabaseActivity" />
         <activity android:name=".AdminActivity" />
         <activity android:name=".MainActivity" />
         <activity
