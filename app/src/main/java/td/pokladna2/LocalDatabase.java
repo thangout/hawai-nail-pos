@@ -20,7 +20,7 @@ public class LocalDatabase {
     private static void init(Context context) {
         if (instance == null) {
             Context newContext = context.getApplicationContext();
-            AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, "appdbs").allowMainThreadQueries().build();
+            AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, "appdbs").allowMainThreadQueries().fallbackToDestructiveMigration().build();
             instance = new LocalDatabase(db);
         }
     }

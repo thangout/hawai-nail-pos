@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey;
 public class Receipt {
 
     @NonNull
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     int id;
 
     @ColumnInfo(name="employee_id")
@@ -29,7 +29,13 @@ public class Receipt {
     @ColumnInfo(name="is_send")
     boolean isSend;
 
-
+    public Receipt(int employeeId, int price, Date datePrinted, String eetRequest, boolean isSend) {
+        this.employeeId = employeeId;
+        this.price = price;
+        this.datePrinted = datePrinted;
+        this.eetRequest = eetRequest;
+        this.isSend = isSend;
+    }
 
     public int getId() {
         return id;
@@ -53,5 +59,9 @@ public class Receipt {
 
     public boolean isSend() {
         return isSend;
+    }
+
+    public void setSend(boolean send) {
+        isSend = send;
     }
 }

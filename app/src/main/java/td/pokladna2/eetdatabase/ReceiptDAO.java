@@ -32,10 +32,10 @@ public interface ReceiptDAO {
     void insertAll(Receipt... receipts);
 
     @Insert
-    void insertEmployee(Receipt receipt);
+    void insertReceipt(Receipt receipt);
 
     @Update
-    void updateEmployee(Receipt receipt);
+    void updateReceipt(Receipt receipt);
 
     @Delete
     void delete(Receipt receipt);

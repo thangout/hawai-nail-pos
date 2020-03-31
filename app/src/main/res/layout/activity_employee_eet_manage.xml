@@ -8,8 +8,9 @@
 
     <TableLayout
         android:id="@+id/eetReceiptTable"
-        android:layout_width="603dp"
+        android:layout_width="800dp"
         android:layout_height="944dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 

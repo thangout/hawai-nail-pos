@@ -1,12 +1,17 @@
 package td.pokladna2;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -21,10 +26,14 @@ import java.util.TimeZone;
 
 //import eet.EetRegisterRequest;
 
+import androidx.appcompat.app.AppCompatActivity;
 import openeet.lite.EetRegisterRequest;
 import td.pokladna2.EetTaskParams;
 import td.pokladna2.MainActivity;
 import td.pokladna2.ReceiptDTO;
+import td.pokladna2.eetdatabase.Receipt;
+import td.pokladna2.employeedbs.AppDatabase;
+import td.pokladna2.employeedbs.Employee;
 
 import static eet.EetRegisterRequest.loadStream;
 
@@ -33,44 +42,87 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
 
     private View view;
 
-    private MainActivity activity;
+    private AppCompatActivity activity;
 
-    public EET(View view) {
-        this.view = view;
-    }
+    private boolean isNewEetSend;
+    private boolean isEETSuccessSend;
 
-    public EET(MainActivity activity) {
-        this.activity = activity;
+    AppDatabase dbs;
+
+
+    public EET(AppCompatActivity activity) {
+        this.activity =  activity;
+        dbs = LocalDatabase.getInstance(activity.getApplicationContext()).DBS;
     }
 
     @Override
     protected ReceiptDTO doInBackground(EetTaskParams... params){
 
-        //check for internet connection
-        if (!isNetworkAvailable()){
-            return null;
+        isNewEetSend = true;
+
+        if (params[0].getReceiptId() > 0){
+            isNewEetSend = false;
         }
 
+
+        double totalSum = 0;
+        String terminalId = "";
+
+        if (isNewEetSend){
+            totalSum = params[0].getTotalSum();
+            terminalId = params[0].getTerminalId();
+        }
+
+        int employeeId = params[0].getEmployeeId();
+        int receiptId = params[0].getReceiptId();
+
+        AssetManager am = activity.getApplicationContext().getAssets();
+        InputStream cert = null;
+        InputStream keyStore = null;
+
+        Employee emp = dbs.employeeDAO().findById(Integer.valueOf(employeeId));
+
+        File file = new File(emp.getCertificateName());
+
+        //this is production line for dynamic load of certificate
+        try {
+            cert = new FileInputStream(file);
+            keyStore = am.open("newbks");
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //uncomment for production
+        //cert = MainActivity.class.getResourceAsStream( "/EET_CA1_Playground-CZ1212121218.p12");
+        //cert = am.open("/EET_CA1_Playground-CZ1212121218.p12");
+
+
+
+        //check for internet connection
+        /*
+        if (!isNetworkAvailable()){
+            activity.showSnackBar("No wifi connection");
+            //return null;
+        }
+
+         */
+
         //Employee certificate
-        InputStream cert = params[0].getCertificate();
-        InputStream keyStore = params[0].getKeyStore();
-        String dic = params[0].getDic();
-        double totalSum = params[0].getTotalSum();
-        String pkcsPassworkd = params[0].getPkcsPassword();
-        String shopId = params[0].getShopId();
-        String terminalId = params[0].getTerminalId();
-
+        String dic = emp.getDic();
+        String pkcsPassworkd = emp.getCertificatePassword();
+        String shopId = emp.getShopId();
         String currentTime = getCurrentTime();
-        String receiptId = getReceiptId();
-
+        String receiptSequenceId = getReceiptId();
         EetRegisterRequest request= null;
-
 
         //custom keystore
         KeyStore ks = null;
         try {
             ks = KeyStore.getInstance(KeyStore.getDefaultType());
-            //ks = KeyStore.getInstance("JKS");
             ks.load(keyStore, "eeteet".toCharArray());
         } catch (KeyStoreException e) {
             e.printStackTrace();
@@ -82,13 +134,12 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
             e.printStackTrace();
         }
 
-
         try {
             request = EetRegisterRequest.builder()
                     .dic_popl(dic)
                     .id_provoz(shopId)
                     .id_pokl(terminalId)
-                    .porad_cis(receiptId)
+                    .porad_cis(receiptSequenceId)
                     .dat_trzby(currentTime)
                     .celk_trzba(totalSum)
                     .rezim(0)
@@ -114,7 +165,15 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
 
         //try send
         //TODO save requestBody to DBS - local and online
-        String requestBody=request.generateSoapRequest();
+
+        String requestBody = null;
+
+        if (isNewEetSend){
+            requestBody = request.generateSoapRequest();
+        }else{
+            requestBody = params[0].getEetRequest();
+        }
+
 
         //assertNotNull(requestBody);
         String response= null;
@@ -125,13 +184,15 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
             Log.d("EET","The EET send had failed when sending");
             e.printStackTrace();
         }
-        System.out.println(response);
+        //System.out.println(response);
         //extract FIK
         //assertNotNull(response);
         //assertTrue(response.contains("Potvrzeni fik="));
 
         String message = "";
         String fik = "";
+
+        isEETSuccessSend = false;
 
         if (response != null){
             if (response.contains("Potvrzeni fik=")) {
@@ -140,12 +201,36 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
                 //extracting the text
                 int startIndex = response.indexOf("fik=");
                 fik = response.substring(startIndex+5, startIndex + 39 + 5);
+                isEETSuccessSend = true;
             }else{
                 message = "EET NEPROBEHLO";
                 System.out.println("EET NEPROBEHLO");
                 fik = "EET NEPROBEHLO";
                 Log.d("EET","The EET send had failed when sending");
             }
+        }
+
+        int convertedSum = (int) totalSum;
+
+        if(isEETSuccessSend & isNewEetSend){
+            //podarilo se poslat novou uctenku
+            Receipt recp = new Receipt(1,convertedSum,new Date(),requestBody,isEETSuccessSend);
+            dbs.receiptDAO().insertReceipt(recp);
+            Log.d("EET", "podarilo se poslat novou uctenku");
+        }else if(!isEETSuccessSend & isNewEetSend){
+            //nepodarila se poslat nova uctenka
+            Receipt recp = new Receipt(1,convertedSum,new Date(),requestBody,isEETSuccessSend);
+            dbs.receiptDAO().insertReceipt(recp);
+            Log.d("EET", "nepodarilo se poslat novou uctenku");
+        }else if(isEETSuccessSend & !isNewEetSend){
+            //podarilo se poslat uctenku ktera se prednim neposlala
+            Receipt recp = dbs.receiptDAO().findById(receiptId);
+            recp.setSend(true);
+            dbs.receiptDAO().updateReceipt(recp);
+            Log.d("EET", "podarilo se poslat uctenku ktera se prednim neposlala");
+        }else{
+            //nepodarilo se poslat uctenku ktera nebyla poslana
+            Log.d("EET", "nepodarilo se poslat uctenku ktera nebyla poslana");
         }
 
 
@@ -155,7 +240,7 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
                 .setShopId(shopId)
                 .setDateTime(currentTime)
                 .setDic(dic)
-                .setReceiptId(receiptId)
+                .setReceiptId(receiptSequenceId)
                 .setFIK(fik)
                 .setBKP(bkp)
                 .setPKP(pkp)
@@ -166,12 +251,32 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
     }
 
     protected void onPostExecute(ReceiptDTO result) {
-        if (result == null){
-            activity.showSnackBar("NO INTERNET CONNECTION");
-            return;
+
+        if(isEETSuccessSend & isNewEetSend){
+            //podarilo se poslat novou uctenku
+            MainActivity mActivity = (MainActivity) activity;
+            System.out.println(result);
+            mActivity.printEetReceipt(result);
+
+        }else if(!isEETSuccessSend & isNewEetSend){
+            //nepodarila se poslat nova uctenka
+            MainActivity mActivity = (MainActivity) activity;
+            System.out.println(result);
+            //TODO call print offline receipt
+            //mActivity.printEetReceipt(result);
+
+        }else if(isEETSuccessSend & !isNewEetSend){
+            //podarilo se poslat uctenku ktera se prednim neposlala
+            EmployeeEetManage mActivity = (EmployeeEetManage) activity;
+            mActivity.initTable();
+
+        }else{
+            //nepodarilo se poslat uctenku ktera nebyla poslana
+
         }
-        System.out.println(result);
-        activity.printEetReceipt(result);
+
+
+
     }
 
 

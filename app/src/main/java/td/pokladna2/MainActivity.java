@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -64,6 +65,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static eet.EetRegisterRequest.loadStream;
 
 public class MainActivity extends AppCompatActivity implements CustomPriceFragment.EditCustomPriceDialogListener {
 
@@ -937,52 +940,13 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
     private void eetCall(){
 
-
-        //EET eetModule = new EET(findViewById(R.id.content));
         EET eetModule = new EET(this);
 
-        AssetManager am = getAssets();
+        EetTaskParams params = new EetTaskParams(Double.valueOf(getCurrentPrice()),Integer.valueOf(employeeId),terminalId);
+        EetTaskParams[] eetParams = {params};
+        eetModule.execute(eetParams);
 
-        InputStream cert = null;
-        InputStream jks = null;
-
-        Employee emp = localDB.employeeDAO().findById(Integer.valueOf(employeeId));
-
-        //check if the employee was found in DBS
-        if (emp == null){
-            showSnackBar("Employee with id " + employeeId + " wasnt found");
-            return;
-        }
-
-        try {
-
-            //cert = am.open(emp.getCertificateName());
-            //TODO the files is not found exception
-
-            File file = new File(emp.getCertificateName());
-
-            cert = new FileInputStream(file);
-
-            jks = am.open("newbks");
-
-            String message = "nic se nestalo";
-
-            if (cert != null){
-
-                EetTaskParams params = new EetTaskParams(Double.valueOf(getCurrentPrice()),emp.getDic(),cert,jks,emp.getCertificatePassword(),emp.getShopId(),terminalId);
-                EetTaskParams[] eetParams = {params};
-                eetModule.execute(eetParams);
-            }
-
-            showSnackBar("Starting EET operation");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
+        showSnackBar("Starting EET operation");
     }
 
     @Override

@@ -14,6 +14,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class EmployeeEetManage extends AppCompatActivity {
@@ -26,11 +28,11 @@ public class EmployeeEetManage extends AppCompatActivity {
         initTable();
     }
 
-    private void initTable() {
+    public void initTable() {
         TableLayout ll = (TableLayout) findViewById(R.id.eetReceiptTable);
         ll.removeAllViews();
 
-        AppDatabase dbs = LocalDatabase.getInstance(getApplicationContext()).DBS;
+        final AppDatabase dbs = LocalDatabase.getInstance(getApplicationContext()).DBS;
 
         //TODO ADD receipt view only for one user and between dates
 
@@ -45,9 +47,21 @@ public class EmployeeEetManage extends AppCompatActivity {
         Button sendButton = null;
         Button deleteButton = null;
 
-        int i = 0;
 
-        for (Receipt rcp : receiptList){
+
+        String[] headers = new String[]{"ReceiptID","EmployeeID","PrintedDate","Price","Is Send","Action","Action"};
+        TableRow tableHead= new TableRow(this);
+        for(String header: headers){
+            TextView headerText = new TextView(this);
+            headerText.setText(header);
+            headerText.setPadding(0, 0, 10, 0);
+            tableHead.addView(headerText);
+        }
+
+        ll.addView(tableHead,0);
+
+        int i = 1;
+        for (final Receipt rcp : receiptList){
             TableRow row= new TableRow(this);
             TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
             row.setLayoutParams(lp);
@@ -55,23 +69,23 @@ public class EmployeeEetManage extends AppCompatActivity {
             //ID
             receiptId = new TextView(this);
             receiptId.setPadding(0, 0, 10, 0);
-            receiptId.setText("ID: " + rcp.getId());
+            receiptId.setText("" + rcp.getId());
 
             employeeId = new TextView(this);
             employeeId.setPadding(0, 0, 10, 0);
-            employeeId.setText("EmployeeId: " + rcp.getEmployeeId());
+            employeeId.setText("" + rcp.getEmployeeId());
 
             printedDate = new TextView(this);
             printedDate.setPadding(0, 0, 10, 0);
-            printedDate.setText("Date: " + rcp.getDatePrinted());
+            printedDate.setText(""+ rcp.getDatePrinted());
 
             price = new TextView(this);
             price.setPadding(0, 0, 10, 0);
-            price.setText("Price: " + rcp.getPrice());
+            price.setText("" + rcp.getPrice());
 
             isSend = new TextView(this);
             isSend.setPadding(0, 0, 10, 0);
-            isSend.setText("Is send: " + rcp.isSend());
+            isSend.setText("" + rcp.isSend());
 
             //send button
             sendButton = new Button(this);
@@ -80,6 +94,8 @@ public class EmployeeEetManage extends AppCompatActivity {
             sendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    manualEetSend(rcp.getEmployeeId(),rcp.getId(),rcp.getEetRequest());
                 }
             });
 
@@ -89,6 +105,8 @@ public class EmployeeEetManage extends AppCompatActivity {
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    dbs.receiptDAO().delete(rcp);
+                    initTable();
                 }
             });
 
@@ -97,12 +115,22 @@ public class EmployeeEetManage extends AppCompatActivity {
             row.addView(printedDate);
             row.addView(price);
             row.addView(isSend);
-            row.addView(deleteButton);
-            row.addView(sendButton);
+
+            if (!rcp.isSend()){
+                row.addView(deleteButton);
+                row.addView(sendButton);
+            }
 
             ll.addView(row,i);
             i++;
         }
 
+    }
+
+    public void manualEetSend(int employeeId,int receiptId, String request){
+        EET eetModule = new EET(this);
+        EetTaskParams params = new EetTaskParams(employeeId,receiptId,request);
+        EetTaskParams[] eetParams = {params};
+        eetModule.execute(eetParams);
     }
 }

@@ -13,6 +13,8 @@ public class ReceiptDTO {
     String BKP;
     String PKP; //print on receipt if in offline mode;
 
+    String eetRequest;
+
     public ReceiptDTO(Builder builder){
         this.totalSum = builder.totalSum;
         this.terminalId = builder.terminalId;
@@ -61,6 +63,10 @@ public class ReceiptDTO {
         return PKP;
     }
 
+    public String getEetRequest() {
+        return eetRequest;
+    }
+
     public static class Builder{
        private double totalSum;
         private String terminalId;
@@ -71,6 +77,7 @@ public class ReceiptDTO {
         private String FIK;
         private String BKP;
         private String PKP; //print on receipt if in offline mode;
+        private String eetRequest; //print on receipt if in offline mode;
 
         public static Builder newInstance(){
             return new Builder();
@@ -118,6 +125,11 @@ public class ReceiptDTO {
 
         public Builder setPKP(String PKP) {
             this.PKP = PKP;
+            return this;
+        }
+
+        public Builder setEetRequest(String request) {
+            this.eetRequest = PKP;
             return this;
         }
 

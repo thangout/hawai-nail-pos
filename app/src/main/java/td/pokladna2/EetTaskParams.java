@@ -17,14 +17,20 @@ public class EetTaskParams {
 
     //ID pokladny
     String terminalId;
+    int employeeId;
+    String eetRequest;
+    int receiptId;
 
+    public EetTaskParams(int employeeId,int receiptId, String eetRequest) {
+        this.employeeId = employeeId;
+        this.eetRequest = eetRequest;
+        this.receiptId = receiptId;
+    }
 
-    public EetTaskParams(double totalSum, String dic, InputStream certificate, InputStream keyStore, String pkcsPassword) {
+    public EetTaskParams(double totalSum, int employeeId, String terminalId) {
         this.totalSum = totalSum;
-        this.dic = dic;
-        this.certificate = certificate;
-        this.keyStore = keyStore;
-        this.pkcsPassword = pkcsPassword;
+        this.employeeId = employeeId;
+        this.terminalId = terminalId;
     }
 
     public EetTaskParams(double totalSum, String dic, InputStream certificate, InputStream keyStore, String pkcsPassword, String shopId, String terminalId) {
@@ -65,4 +71,15 @@ public class EetTaskParams {
         return terminalId;
     }
 
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public String getEetRequest() {
+        return eetRequest;
+    }
+
+    public int getReceiptId() {
+        return receiptId;
+    }
 }
