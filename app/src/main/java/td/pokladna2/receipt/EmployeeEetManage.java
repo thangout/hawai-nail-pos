@@ -1,9 +1,11 @@
 package td.pokladna2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import td.pokladna2.eetdatabase.Receipt;
 import td.pokladna2.employeedbs.AddEmployee;
 import td.pokladna2.employeedbs.AppDatabase;
+import td.pokladna2.employeedbs.DatePickerFragment;
 import td.pokladna2.employeedbs.Employee;
 
 import android.content.Intent;
@@ -16,16 +18,37 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class EmployeeEetManage extends AppCompatActivity {
+
+    int employeeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_eet_manage);
 
+        String empId = getIntent().getExtras().getString("EMPLOYEE_ID");
+        employeeId = Integer.valueOf(empId);
+
         initTable();
+        initButtons();
+    }
+
+    private void initButtons() {
+
+        Button pickDateButton = findViewById(R.id.pickDateButton);
+
+        pickDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = new DatePickerFragment();
+                newFragment.show(getSupportFragmentManager(), "datePicker");
+            }
+        });
     }
 
     public void initTable() {
@@ -35,8 +58,9 @@ public class EmployeeEetManage extends AppCompatActivity {
         final AppDatabase dbs = LocalDatabase.getInstance(getApplicationContext()).DBS;
 
         //TODO ADD receipt view only for one user and between dates
-
-        List<Receipt> receiptList = dbs.receiptDAO().getAll();
+        //List<Receipt> receiptList = dbs.receiptDAO().getAll();
+        Date[] dateRange = getTodayDateRange();
+        List<Receipt> receiptList = dbs.receiptDAO().findEmployeeReceiptPrintedBetweenDates(employeeId,dateRange[0],dateRange[1]);
 
         TextView receiptId = null;
         TextView employeeId = null;
@@ -125,6 +149,28 @@ public class EmployeeEetManage extends AppCompatActivity {
             i++;
         }
 
+    }
+
+    Date[] getTodayDateRange(){
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+
+        int dayOfMonth = cal.get(cal.DAY_OF_MONTH);
+        int year = cal.get(cal.YEAR);
+        int month = cal.get(cal.MONTH);
+
+
+        cal.set(year,month,dayOfMonth,1,0);
+        Date startDate = cal.getTime();
+        System.out.println("datum" + cal.toString());
+        final long startTmp = startDate.getTime();
+
+        cal.set(year,month,dayOfMonth,23,0);
+        System.out.println("datum2" + cal.toString());
+        Date endDate = cal.getTime();
+        long endTmp = endDate.getTime();
+
+        return new Date[]{startDate,endDate};
     }
 
     public void manualEetSend(int employeeId,int receiptId, String request){
