@@ -1,6 +1,5 @@
 package td.pokladna2;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
@@ -28,12 +27,10 @@ import java.util.TimeZone;
 
 import androidx.appcompat.app.AppCompatActivity;
 import openeet.lite.EetRegisterRequest;
-import td.pokladna2.EetTaskParams;
-import td.pokladna2.MainActivity;
-import td.pokladna2.ReceiptDTO;
 import td.pokladna2.eetdatabase.Receipt;
 import td.pokladna2.employeedbs.AppDatabase;
 import td.pokladna2.employeedbs.Employee;
+import td.pokladna2.receipt.EmployeeEetManage;
 
 import static eet.EetRegisterRequest.loadStream;
 
@@ -99,8 +96,6 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
         //uncomment for production
         //cert = MainActivity.class.getResourceAsStream( "/EET_CA1_Playground-CZ1212121218.p12");
         //cert = am.open("/EET_CA1_Playground-CZ1212121218.p12");
-
-
 
         //check for internet connection
         /*
@@ -214,12 +209,12 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
 
         if(isEETSuccessSend & isNewEetSend){
             //podarilo se poslat novou uctenku
-            Receipt recp = new Receipt(1,convertedSum,new Date(),requestBody,isEETSuccessSend);
+            Receipt recp = new Receipt(employeeId,convertedSum,new Date(),requestBody,isEETSuccessSend);
             dbs.receiptDAO().insertReceipt(recp);
             Log.d("EET", "podarilo se poslat novou uctenku");
         }else if(!isEETSuccessSend & isNewEetSend){
             //nepodarila se poslat nova uctenka
-            Receipt recp = new Receipt(1,convertedSum,new Date(),requestBody,isEETSuccessSend);
+            Receipt recp = new Receipt(employeeId,convertedSum,new Date(),requestBody,isEETSuccessSend);
             dbs.receiptDAO().insertReceipt(recp);
             Log.d("EET", "nepodarilo se poslat novou uctenku");
         }else if(isEETSuccessSend & !isNewEetSend){
@@ -274,9 +269,6 @@ public class EET extends AsyncTask<EetTaskParams, Void, ReceiptDTO> {
             //nepodarilo se poslat uctenku ktera nebyla poslana
 
         }
-
-
-
     }
 
 

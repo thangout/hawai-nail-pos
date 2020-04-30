@@ -8,8 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -18,8 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import td.pokladna2.employeedbs.AppDatabase;
-import td.pokladna2.employeedbs.Employee;
 import td.pokladna2.employeedbs.EmployeeDBS;
+import td.pokladna2.receipt.EmployeeEetManage;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -51,10 +49,6 @@ import net.posprinter.service.PosprinterService;
 import net.posprinter.utils.DataForSendToPrinterPos58;
 import net.posprinter.utils.DataForSendToPrinterPos80;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -785,7 +779,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         */
 
-        //TODO check the length of the input
+        //TODO check the length of the input and amount itself
         if (textInDisplay.length() > 4){
             showSnackBar("Number is too high");
             return;

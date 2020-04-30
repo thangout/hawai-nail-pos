@@ -40,6 +40,8 @@ public class AddEmployee extends AppCompatActivity {
         Intent intent = getIntent();
         int employeeId = intent.getIntExtra("EMPLOYEE_ID",-1);
 
+        dbs = LocalDatabase.getInstance(getApplicationContext()).DBS;
+
         if (employeeId == -1){
             isUpdateState = false;
         }else{
@@ -47,7 +49,7 @@ public class AddEmployee extends AppCompatActivity {
             isUpdateState = true;
         }
 
-        dbs = LocalDatabase.getInstance(getApplicationContext()).DBS;
+
 
         initButtons();
     }
