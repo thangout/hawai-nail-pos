@@ -5,6 +5,7 @@ import td.pokladna2.employeedbs.AppDatabase;
 import td.pokladna2.employeedbs.Employee;
 import td.pokladna2.employeedbs.EmployeeDBS;
 import td.pokladna2.employeedbs.ManageEmployeesDatabaseActivity;
+import td.pokladna2.reporting.Dashboard;
 
 import android.content.Context;
 import android.content.Intent;
@@ -50,6 +51,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ManageEmployeesDatabaseActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button dashboardButton = findViewById(R.id.dashboardButton);
+
+        dashboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Dashboard.class);
                 startActivity(intent);
             }
         });

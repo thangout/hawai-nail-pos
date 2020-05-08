@@ -1,5 +1,6 @@
 package td.pokladna2.receipt;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -10,13 +11,14 @@ import java.util.Calendar;
 
 import androidx.fragment.app.DialogFragment;
 import td.pokladna2.receipt.EmployeeEetManage;
+import td.pokladna2.reporting.DatePickerInterface;
 
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
-    EmployeeEetManage activity;
+    DatePickerInterface activity;
 
-    public DatePickerFragment(EmployeeEetManage activity) {
+    public DatePickerFragment(DatePickerInterface activity) {
         this.activity = activity;
     }
 

@@ -1,14 +1,13 @@
-package td.pokladna2.receipt;
+package td.pokladna2.reporting;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
-import td.pokladna2.EET;
-import td.pokladna2.EetTaskParams;
 import td.pokladna2.LocalDatabase;
 import td.pokladna2.R;
 import td.pokladna2.eetdatabase.Receipt;
 import td.pokladna2.employeedbs.AppDatabase;
-import td.pokladna2.reporting.DatePickerInterface;
+import td.pokladna2.receipt.DatePickerFragment;
+import td.pokladna2.receipt.EmployeeEetManage;
 
 import android.os.Bundle;
 import android.view.View;
@@ -17,27 +16,24 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class EmployeeEetManage extends AppCompatActivity implements DatePickerInterface {
-
-    int employeeId;
-    AppDatabase dbs;
+public class Dashboard extends AppCompatActivity implements DatePickerInterface {
 
     Calendar calendar;
+    AppDatabase dbs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_employee_eet_manage);
+        setContentView(R.layout.activity_dashboard);
 
         dbs = LocalDatabase.getInstance(getApplicationContext()).DBS;
-
-        String empId = getIntent().getExtras().getString("EMPLOYEE_ID");
-        employeeId = Integer.valueOf(empId);
 
         calendar = Calendar.getInstance();
 
@@ -45,22 +41,13 @@ public class EmployeeEetManage extends AppCompatActivity implements DatePickerIn
         initButtons();
     }
 
-    private void initButtons() {
+    private void setTextViews(int moneySum, int numOfCustomers) {
 
-        Button pickDateButton = findViewById(R.id.pickDateButton);
+        TextView moneySumText = findViewById(R.id.moneySumText);
+        moneySumText.setText(String.valueOf(moneySum));
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        String formatedDate = sdf.format(calendar.getTime());
-        pickDateButton.setText(formatedDate);
-
-        final EmployeeEetManage activityThis = this;
-        pickDateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogFragment newFragment = new DatePickerFragment(activityThis);
-                newFragment.show(getSupportFragmentManager(), "datePicker");
-            }
-        });
+        TextView numOfCustomersText = findViewById(R.id.numOfCustomersText);
+        numOfCustomersText.setText(String.valueOf(numOfCustomers));
     }
 
     public void initTable() {
@@ -71,13 +58,12 @@ public class EmployeeEetManage extends AppCompatActivity implements DatePickerIn
 
         Date[] dateRange = getTodayDateRange(year, month, dayOfMonth);
 
-        TableLayout ll = (TableLayout) findViewById(R.id.eetReceiptTable);
+        TableLayout ll = (TableLayout) findViewById(R.id.eetReceiptTableDashboard);
         ll.removeAllViews();
 
 
-        //List<Receipt> receiptList = dbs.receiptDAO().getAll();
+        List<Receipt> receiptList = dbs.receiptDAO().findReceiptPrintedBetweenDates(dateRange[0],dateRange[1]);
 
-        List<Receipt> receiptList = dbs.receiptDAO().findEmployeeReceiptPrintedBetweenDates(employeeId,dateRange[0],dateRange[1]);
 
         TextView receiptId = null;
         TextView employeeId = null;
@@ -102,6 +88,8 @@ public class EmployeeEetManage extends AppCompatActivity implements DatePickerIn
         ll.addView(tableHead,0);
 
         int i = 1;
+        int moneySum = 0;
+
         for (final Receipt rcp : receiptList){
             TableRow row= new TableRow(this);
             TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
@@ -135,8 +123,7 @@ public class EmployeeEetManage extends AppCompatActivity implements DatePickerIn
             sendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    manualEetSend(rcp.getEmployeeId(),rcp.getId(),rcp.getEetRequest());
+                    //manualEetSend(rcp.getEmployeeId(),rcp.getId(),rcp.getEetRequest());
                 }
             });
 
@@ -164,12 +151,33 @@ public class EmployeeEetManage extends AppCompatActivity implements DatePickerIn
 
             ll.addView(row,i);
             i++;
+            moneySum += rcp.getPrice();
         }
+
+        setTextViews(moneySum,receiptList.size());
 
     }
 
-    public void updateTable(int year, int month, int day){
+    private void initButtons() {
 
+        Button pickDateButton = findViewById(R.id.pickDateButton);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        String formatedDate = sdf.format(calendar.getTime());
+        pickDateButton.setText(formatedDate);
+
+        final Dashboard activityThis = this;
+        pickDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = new DatePickerFragment(activityThis);
+                newFragment.show(getSupportFragmentManager(), "datePicker");
+            }
+        });
+    }
+
+    @Override
+    public void updateTable(int year, int month, int day) {
         calendar.set(year, month,day);
         initButtons();
         initTable();
@@ -191,12 +199,4 @@ public class EmployeeEetManage extends AppCompatActivity implements DatePickerIn
 
         return new Date[]{startDate,endDate};
     }
-
-    public void manualEetSend(int employeeId,int receiptId, String request){
-        EET eetModule = new EET(this);
-        EetTaskParams params = new EetTaskParams(employeeId,receiptId,request);
-        EetTaskParams[] eetParams = {params};
-        eetModule.execute(eetParams);
-    }
-
 }

@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+    <Button
+        android:id="@+id/dashboardButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:text="Dashboard"
+        app:layout_constraintEnd_toStartOf="@+id/adminButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/passwordText"
         android:layout_width="356dp"
