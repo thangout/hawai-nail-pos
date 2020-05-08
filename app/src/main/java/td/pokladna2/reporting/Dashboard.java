@@ -6,9 +6,11 @@ import td.pokladna2.LocalDatabase;
 import td.pokladna2.R;
 import td.pokladna2.eetdatabase.Receipt;
 import td.pokladna2.employeedbs.AppDatabase;
+import td.pokladna2.employeedbs.ManageEmployeesDatabaseActivity;
 import td.pokladna2.receipt.DatePickerFragment;
 import td.pokladna2.receipt.EmployeeEetManage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -172,6 +174,17 @@ public class Dashboard extends AppCompatActivity implements DatePickerInterface 
             public void onClick(View view) {
                 DialogFragment newFragment = new DatePickerFragment(activityThis);
                 newFragment.show(getSupportFragmentManager(), "datePicker");
+            }
+        });
+
+
+
+        Button adminButton = findViewById(R.id.adminButton);
+        adminButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ManageEmployeesDatabaseActivity.class);
+                startActivity(intent);
             }
         });
     }

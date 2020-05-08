@@ -19,7 +19,7 @@
         <activity android:name=".receipt.EmployeeEetManage" />
         <activity android:name=".employeedbs.AddEmployee" />
         <activity android:name=".employeedbs.ManageEmployeesDatabaseActivity" />
-        <activity android:name=".AdminActivity" />
+        <activity android:name=".AdminLoginActivity" />
         <activity android:name=".MainActivity" />
         <activity
             android:name=".LoginActivity"

@@ -45,22 +45,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setupButtons() {
 
-        Button adminButton = findViewById(R.id.adminButton);
-
-        adminButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ManageEmployeesDatabaseActivity.class);
-                startActivity(intent);
-            }
-        });
 
         Button dashboardButton = findViewById(R.id.dashboardButton);
-
         dashboardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+                Intent intent = new Intent(getApplicationContext(), AdminLoginActivity.class);
                 startActivity(intent);
             }
         });
