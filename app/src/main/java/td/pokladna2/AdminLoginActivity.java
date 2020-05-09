@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 public class AdminLoginActivity extends AppCompatActivity {
 
-    String PASSWORD_ADMIN = "111";
+    String PASSWORD_ADMIN = "admin2020#";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class AdminLoginActivity extends AppCompatActivity {
 
                 String passText = editable.toString();
 
-                if (passText.length() == 3) {
+                if (passText.length() == 10) {
 
                     if (PASSWORD_ADMIN.equals(passText)){
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

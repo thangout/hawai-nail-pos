@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
     //String DBS_NAME = "nailsfloraprod";
 
     //Sestka production
-    //String DBS_NAME = "nailssestkaprod";
-    String DBS_NAME = "nailsfloratest";
+    String DBS_NAME = "nailssestkaprod";
+    //String DBS_NAME = "nailsfloratest";
 
     String terminalId = "Pokladna001";
 
@@ -143,8 +143,9 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         setupEmployeeInfo();
 
         //comment for deployment on simulator
-        //setupBT();
+        setupBT();
 
+        //log out employee logged on this profile
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -162,8 +163,6 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
         TextView empNameText = findViewById(R.id.addEmpNameText);
         empNameText.setText(employeeName);
-
-
 
         //TODO fetch data about the employee all his transactions
 
@@ -423,8 +422,8 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
             public void onClick(View view) {
 
                 if (priceDisplay.getText().equals("0")) return;
-
-                eetCall();
+                //TODO this feature is not out only for testing so comment calling of eetCall() in production
+                //eetCall();
             }
         });
 
@@ -708,7 +707,6 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
                             //cut pager
 
-
                             if (shopID == 1){
                                 //flora
                                 list.add(DataForSendToPrinterPos80.selectCutPagerModerAndCutPager(66,1));
@@ -780,6 +778,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         */
 
         //TODO check the length of the input and amount itself
+
         if (textInDisplay.length() > 4){
             showSnackBar("Number is too high");
             return;

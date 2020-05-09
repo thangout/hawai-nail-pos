@@ -59,6 +59,7 @@ public class EmployeeDBS {
         employeesSestka.add(new Employee(305, "Loan","12129",""));
         employeesSestka.add(new Employee(306, "Nhung","23982",""));
         employeesSestka.add(new Employee(307, "Thanh","18802",""));
+        employeesSestka.add(new Employee(308, "Nhung2","23599",""));
         //employeesSestka.add(new Employee(999999, "TEST","11111",""));
 
     }
