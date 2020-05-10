@@ -54,6 +54,15 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button sequenceButton = findViewById(R.id.sequenceOpenButton);
+        sequenceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PrintSequenceNumber.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initListeners() {

@@ -32,6 +32,8 @@ public class AddEmployee extends AppCompatActivity {
 
     AppDatabase dbs;
 
+    Employee emp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,13 +52,12 @@ public class AddEmployee extends AppCompatActivity {
         }
 
 
-
         initButtons();
     }
 
     private void loadDataToView(int employeeId) {
 
-        Employee emp = dbs.employeeDAO().findById(employeeId);
+        emp = dbs.employeeDAO().findById(employeeId);
         TextView id = findViewById(R.id.addEmpIdText);
         TextView name = findViewById(R.id.addEmpNameText);
         TextView password = findViewById(R.id.addEmpPasswordText);
@@ -94,6 +95,19 @@ public class AddEmployee extends AppCompatActivity {
                     saveEmployeeToDBS();
             }
         });
+
+
+        final Button deleteEmp = findViewById(R.id.deleteEmployeeButton);
+
+        deleteEmp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dbs.employeeDAO().delete(emp);
+                finish();
+            }
+        });
+
+
 
     }
 

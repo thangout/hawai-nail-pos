@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".reporting.Dashboard"></activity>
+        <activity android:name=".PrintSequenceNumber"></activity>
+        <activity android:name=".reporting.Dashboard" />
         <activity android:name=".receipt.EmployeeEetManage" />
         <activity android:name=".employeedbs.AddEmployee" />
         <activity android:name=".employeedbs.ManageEmployeesDatabaseActivity" />

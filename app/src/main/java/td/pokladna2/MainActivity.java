@@ -67,15 +67,15 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
     //set the ID of a shop that the app is installed for
     // shopID = 2 is for Sestka
     // shopID = 1 is for Flora
-    int shopID = 2;
+    int shopID = 1;
 
 
     //use name = nailsfloratest, for test purposes
     //Flora production
-    //String DBS_NAME = "nailsfloraprod";
+    String DBS_NAME = "nailsfloraprod";
 
     //Sestka production
-    String DBS_NAME = "nailssestkaprod";
+    //String DBS_NAME = "nailssestkaprod";
     //String DBS_NAME = "nailsfloratest";
 
     String terminalId = "Pokladna001";
@@ -154,6 +154,9 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
             }
             //5minutes
         }, 300000);
+
+        //manula quick save all the employees to local dbs
+        //employeeDBS = new EmployeeDBS(getApplicationContext());
     }
 
     private void setupEmployeeInfo() {

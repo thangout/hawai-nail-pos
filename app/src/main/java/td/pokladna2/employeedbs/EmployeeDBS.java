@@ -23,8 +23,10 @@ public class EmployeeDBS {
     public EmployeeDBS(Context context) {
         this.context = context;
 
-
         createInCodeDBS();
+
+        db = LocalDatabase.getInstance(context).DBS;
+        saveFloraEmployeeToLocalDBS();
     }
 
     public static EmployeeDBS getInstance() {
@@ -37,19 +39,19 @@ public class EmployeeDBS {
         employeesFlora.add(new Employee(203, "Van","65113","CZ00000019","EET_CA1_Playground-CZ00000019.p12","eet", "1"));
         employeesFlora.add(new Employee(204, "Quynh Anh","10389",""));
 
-        employeesFlora.add(new Employee(205, "Ngan","60182",""));
-        employeesFlora.add(new Employee(206, "Mai","29178",""));
-        employeesFlora.add(new Employee(207, "Diem","14720",""));
-        employeesFlora.add(new Employee(208, "Hong","51179",""));
+        employeesFlora.add(new Employee(205, "Ngan","60182","","EET_CA1_Playground-CZ1212121218.p12","eet","1"));
+        employeesFlora.add(new Employee(206, "Mai","29178","","EET_CA1_Playground-CZ1212121218.p12","eet","1"));
+        employeesFlora.add(new Employee(207, "Diem","14720","","EET_CA1_Playground-CZ1212121218.p12","eet","1"));
+        employeesFlora.add(new Employee(208, "Hong","51179","","EET_CA1_Playground-CZ1212121218.p12","eet","1"));
 
-        employeesFlora.add(new Employee(209, "Thu","22905",""));
-        employeesFlora.add(new Employee(210, "Lan","92535",""));
-        employeesFlora.add(new Employee(211, "Thuy","59112",""));
-        employeesFlora.add(new Employee(212, "Lich","99723",""));
+        employeesFlora.add(new Employee(209, "Thu","22905","","EET_CA1_Playground-CZ1212121218.p12","eet","1"));
+        employeesFlora.add(new Employee(210, "Lan","92535","","EET_CA1_Playground-CZ1212121218.p12","eet","1"));
+        employeesFlora.add(new Employee(211, "Thuy","59112","","EET_CA1_Playground-CZ1212121218.p12","eet","1"));
+        employeesFlora.add(new Employee(212, "Lich","99723","","EET_CA1_Playground-CZ1212121218.p12","eet","1"));
 
-        employeesFlora.add(new Employee(213, "Nhung","26301",""));
-        employeesFlora.add(new Employee(214, "Chi","16184",""));
-        employeesFlora.add(new Employee(215, "Hang","08984",""));
+        employeesFlora.add(new Employee(213, "Nhung","26301","","EET_CA1_Playground-CZ1212121218.p12","eet","1"));
+        employeesFlora.add(new Employee(214, "Chi","16184","","EET_CA1_Playground-CZ1212121218.p12","eet","1"));
+        employeesFlora.add(new Employee(215, "Hang","08984","","EET_CA1_Playground-CZ1212121218.p12","eet","1"));
 
 
         employeesSestka.add(new Employee(301, "Ha","22425",""));
@@ -62,6 +64,12 @@ public class EmployeeDBS {
         employeesSestka.add(new Employee(308, "Nhung2","23599",""));
         //employeesSestka.add(new Employee(999999, "TEST","11111",""));
 
+    }
+
+    void saveFloraEmployeeToLocalDBS(){
+        for(Employee emp : employeesFlora){
+            saveEmployee(emp);
+        }
     }
 
     public void saveEmployee(Employee employee){

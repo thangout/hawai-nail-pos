@@ -8,8 +8,8 @@
 
     <TableLayout
         android:id="@+id/employeesTable"
-        android:layout_width="605dp"
-        android:layout_height="620dp"
+        android:layout_width="609dp"
+        android:layout_height="844dp"
         android:layout_marginTop="100dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
