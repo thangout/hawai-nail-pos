@@ -7,6 +7,7 @@ import td.pokladna2.employeedbs.EmployeeDBS;
 import td.pokladna2.employeedbs.ManageEmployeesDatabaseActivity;
 import td.pokladna2.reporting.Dashboard;
 
+import android.bluetooth.BluetoothAssignedNumbers;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
         initListeners();
 
         setupButtons();
+
+        //BluetoothPrinter bprinter = new BluetoothPrinter(getApplicationContext());
     }
 
     private void setupButtons() {

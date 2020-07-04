@@ -7,7 +7,7 @@ import td.pokladna2.eetdatabase.DateConverters;
 import td.pokladna2.eetdatabase.Receipt;
 import td.pokladna2.eetdatabase.ReceiptDAO;
 
-@Database(entities = {Employee.class, Receipt.class}, version = 2)
+@Database(entities = {Employee.class, Receipt.class}, version = 3)
 @TypeConverters({DateConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
 

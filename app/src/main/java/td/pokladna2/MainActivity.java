@@ -72,11 +72,11 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
 
     //use name = nailsfloratest, for test purposes
     //Flora production
-    String DBS_NAME = "nailsfloraprod";
+    //String DBS_NAME = "nailsfloraprod";
 
     //Sestka production
     //String DBS_NAME = "nailssestkaprod";
-    //String DBS_NAME = "nailsfloratest";
+    String DBS_NAME = "nailsfloratest";
 
     String terminalId = "Pokladna001";
 
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         setupEmployeeInfo();
 
         //comment for deployment on simulator
-        setupBT();
+        //setupBT();
 
         //log out employee logged on this profile
         final Handler handler = new Handler();
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                 finish();
             }
             //5minutes
-        }, 300000);
+        }, 180000);
 
         //manula quick save all the employees to local dbs
         //employeeDBS = new EmployeeDBS(getApplicationContext());
@@ -515,6 +515,11 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                         Log.w("x", "Error adding document", e);
                     }
                 });
+    }
+
+    //TODO implement
+    private void saveTransactionToLocalDbs(){
+
     }
 
     private void setPriceToHalfPrice() {

@@ -46,7 +46,7 @@ public class PrintSequenceNumber extends AppCompatActivity {
     private Set<BluetoothDevice> pairedDevices;
     ListView pairedDevicesListView;
 
-    public static IMyBinder binder;
+    public IMyBinder binder;
 
     //bindService connection
     ServiceConnection conn;
@@ -63,6 +63,7 @@ public class PrintSequenceNumber extends AppCompatActivity {
         setContentView(R.layout.activity_print_sequence_number);
 
         setupBT();
+        //binder = BluetoothPrinter.getInstance(getApplicationContext()).getBinder();
         setUpData();
         setUpText();
         initButton();
@@ -234,6 +235,7 @@ public class PrintSequenceNumber extends AppCompatActivity {
 
     private void printReceipt(){
 
+        //isConnectedToPrinter = BluetoothPrinter.getInstance(getApplicationContext()).isConnectedToPrinter();
         //if bluetooth printer is not connected
         if (!isConnectedToPrinter) return;
 

@@ -26,6 +26,12 @@ public class Receipt {
     @ColumnInfo(name="eet_request")
     String eetRequest;
 
+    @ColumnInfo(name="is_eet")
+    boolean isEet;
+
+    @ColumnInfo(name="serviceName")
+    String serviceName;
+
     @ColumnInfo(name="is_send")
     boolean isSend;
 
