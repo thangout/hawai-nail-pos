@@ -67,16 +67,18 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
     //set the ID of a shop that the app is installed for
     // shopID = 2 is for Sestka
     // shopID = 1 is for Flora
-    int shopID = 1;
+    int shopID = 3;
 
 
     //use name = nailsfloratest, for test purposes
     //Flora production
     //String DBS_NAME = "nailsfloraprod";
+    String DBS_NAME = "beautyfloraprod";
 
     //Sestka production
     //String DBS_NAME = "nailssestkaprod";
-    String DBS_NAME = "nailsfloratest";
+    //String DBS_NAME = "nailsfloratest";
+
 
     String terminalId = "Pokladna001";
 
@@ -143,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         setupEmployeeInfo();
 
         //comment for deployment on simulator
-        //setupBT();
+        setupBT();
 
         //log out employee logged on this profile
         final Handler handler = new Handler();
@@ -307,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
         if (shopID == 1){
             //flora
             posPrinterName = "Printer002";
-        }else if (shopID == 2){
+        }else if (shopID == 2 || shopID == 3){
             //sestka
             posPrinterName = "Printer001";
         }
@@ -645,6 +647,9 @@ public class MainActivity extends AppCompatActivity implements CustomPriceFragme
                                 //SESTKA
                                 companyShop = "Pobocka: Fajtlova 1090/1, 161 00, Praha 6, OC ŠESTKA";
                                 companyShop2 = "OC Sestka";
+                            } else if(shopID == 3){
+                                companyShop = "Pobocka: Vinohradska 151, 130 00, Praha 3";
+                                companyShop2 = "OC Atrium Flora";
                             }
 
 

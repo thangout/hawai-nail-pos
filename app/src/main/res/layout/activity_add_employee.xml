@@ -10,13 +10,11 @@
         android:id="@+id/addEmpIdText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="64dp"
         android:ems="10"
         android:hint="ID "
         android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/guideline6Left   "
+        app:layout_constraintTop_toTopOf="@+id/guideline5Top" />
 
     <TextView
         android:id="@+id/textView2"
@@ -30,7 +28,7 @@
         android:id="@+id/addEmpNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
@@ -49,7 +47,7 @@
         android:id="@+id/addEmpPasswordText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Password "
         android:inputType="textPersonName"
@@ -68,7 +66,7 @@
         android:id="@+id/addEmpDicText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="DIC"
         android:inputType="textPersonName"
@@ -87,7 +85,7 @@
         android:id="@+id/addEmpCertificateNameText"
         android:layout_width="374dp"
         android:layout_height="51dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Choose certificate"
         android:inputType="textPersonName"
@@ -115,7 +113,7 @@
         android:id="@+id/addEmpCertificatePasswordText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Certificate password"
         android:inputType="textPersonName"
@@ -134,7 +132,7 @@
         android:id="@+id/addEmpShopIdText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Shop ID"
         android:inputType="textPersonName"
@@ -166,5 +164,20 @@
         android:text="Delete"
         app:layout_constraintBottom_toBottomOf="@+id/saveEmployeeButton"
         app:layout_constraintStart_toEndOf="@+id/saveEmployeeButton" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5Top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6Left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1
+" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

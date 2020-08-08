@@ -6,142 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/minusButton"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="80dp"
-        android:text="Sua"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="@+id/buttonPrintReciept"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPrintReciept" />
 
-    <Button
-        android:id="@+id/noThree"
-        android:layout_width="122dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="48dp"
-        android:text="3"
-        android:textSize="50sp"
-        app:layout_constraintStart_toEndOf="@+id/noTwo"
-        app:layout_constraintTop_toTopOf="@+id/noTwo" />
 
-    <Button
-        android:id="@+id/noZero"
-        android:layout_width="122dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="32dp"
-        android:text="0"
-        android:textSize="50sp"
-        app:layout_constraintStart_toStartOf="@+id/noOne"
-        app:layout_constraintTop_toBottomOf="@+id/noOne" />
-
-    <Button
-        android:id="@+id/noTwo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="44dp"
-        android:text="2"
-        android:textSize="50sp"
-        app:layout_constraintStart_toEndOf="@+id/noOne"
-        app:layout_constraintTop_toTopOf="@+id/noOne" />
-
-    <Button
-        android:id="@+id/noOne"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="24dp"
-        android:text="1"
-        android:textSize="50sp"
-        app:layout_constraintStart_toStartOf="@+id/noFour"
-        app:layout_constraintTop_toBottomOf="@+id/noFour" />
-
-    <Button
-        android:id="@+id/noSeven"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="316dp"
-        android:layout_marginTop="266dp"
-        android:text="7"
-        android:textSize="50sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/noEight"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="44dp"
-        android:text="8"
-        android:textSize="50sp"
-        app:layout_constraintStart_toEndOf="@+id/noSeven"
-        app:layout_constraintTop_toTopOf="@+id/noSeven" />
-
-    <Button
-        android:id="@+id/noNine"
-        android:layout_width="120sp"
-        android:layout_height="120sp"
-        android:layout_marginStart="48dp"
-        android:text="9"
-        android:textSize="50sp"
-        app:layout_constraintStart_toEndOf="@+id/noEight"
-        app:layout_constraintTop_toTopOf="@+id/noEight" />
-
-    <Button
-        android:id="@+id/noFive"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="44dp"
-        android:text="5"
-        android:textSize="50sp"
-        app:layout_constraintStart_toEndOf="@+id/noFour"
-        app:layout_constraintTop_toTopOf="@+id/noFour" />
-
-    <Button
-        android:id="@+id/noSix"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="48dp"
-        android:text="6"
-        android:textSize="50sp"
-        app:layout_constraintStart_toEndOf="@+id/noFive"
-        app:layout_constraintTop_toTopOf="@+id/noFive" />
-
-    <Button
-        android:id="@+id/noFour"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="24dp"
-        android:text="4"
-        android:textSize="50sp"
-        app:layout_constraintStart_toStartOf="@+id/noSeven"
-        app:layout_constraintTop_toBottomOf="@+id/noSeven" />
 
     <TextView
         android:id="@+id/viewPrice"
-        android:layout_width="340dp"
-        android:layout_height="111dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="84dp"
+        android:layout_width="0dp"
+        android:layout_height="105dp"
+        android:layout_marginTop="8dp"
         android:text="0"
         android:textAlignment="textStart"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="80sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonErase"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="120dp"
-        android:layout_height="108dp"
-        android:layout_marginEnd="24dp"
-        android:background="@color/colorAccent"
-        android:text="Xoa"
-        android:textColor="@android:color/white"
-        android:textSize="36sp"
-        app:layout_constraintEnd_toStartOf="@+id/noSeven"
-        app:layout_constraintTop_toTopOf="@+id/noSeven" />
+        app:layout_constraintWidth_percent="0.4"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <Button
         android:id="@+id/buttonPrintReciept"
@@ -152,75 +31,56 @@
         android:text="In hoa don"
         android:textColor="@android:color/white"
         android:textSize="36sp"
-        app:layout_constraintBottom_toBottomOf="@+id/noZero"
-        app:layout_constraintEnd_toEndOf="@+id/noThree" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline15"
+        app:layout_constraintEnd_toStartOf="@+id/guideline14" />
 
-    <Button
-        android:id="@+id/customPriceButton"
-        android:layout_width="120dp"
-        android:layout_height="101dp"
-        android:layout_marginTop="32dp"
-        android:text="Trang trí"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/halfPriceButton"
-        app:layout_constraintTop_toBottomOf="@+id/halfPriceButton" />
 
-    <Button
-        android:id="@+id/plusButton"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="24dp"
-        android:text="+"
-        android:textSize="50sp"
-        app:layout_constraintStart_toStartOf="@+id/customPriceButton"
-        app:layout_constraintTop_toBottomOf="@+id/customPriceButton" />
 
-    <Button
-        android:id="@+id/halfPriceButton"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="32dp"
-        android:text="50%"
-        android:textSize="50sp"
-        app:layout_constraintStart_toStartOf="@+id/buttonErase"
-        app:layout_constraintTop_toBottomOf="@+id/buttonErase" />
+
 
     <TextView
         android:id="@+id/viewCalcOperation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:text="0"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/viewPrice"
-        app:layout_constraintStart_toStartOf="@+id/viewPrice" />
+        app:layout_constraintStart_toStartOf="@+id/guideline6" />
 
     <TextView
         android:id="@+id/addEmpNameText"
-        android:layout_width="252dp"
+        android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_marginStart="108dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="8dp"
         android:text="TextView"
         android:textSize="50dp"
         app:layout_constraintBottom_toBottomOf="@+id/viewPrice"
-        app:layout_constraintStart_toEndOf="@+id/viewPrice" />
+        app:layout_constraintStart_toEndOf="@+id/viewPrice"
+        app:layout_constraintWidth_percent="0.6" />
 
     <ListView
         android:id="@+id/transactionListView"
-        android:layout_width="122dp"
-        android:layout_height="516dp"
+        android:layout_width="0dp"
+        android:layout_height="416dp"
+        app:layout_constraintEnd_toStartOf="@+id/leftNumPad"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/viewPrice"
-        app:layout_constraintTop_toTopOf="@+id/noSeven"></ListView>
+        app:layout_constraintTop_toTopOf="@+id/guideline18"
+        app:layout_constraintWidth_percent="1"></ListView>
 
     <TextView
         android:id="@+id/transSumText"
-        android:layout_width="270dp"
+        android:layout_width="0dp"
         android:layout_height="72dp"
         android:layout_marginTop="50dp"
         android:text="dang tính toán"
         android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="@+id/transactionListView"
         app:layout_constraintStart_toStartOf="@+id/transactionListView"
-        app:layout_constraintTop_toBottomOf="@+id/transactionListView" />
+        app:layout_constraintTop_toBottomOf="@+id/transactionListView"
+        app:layout_constraintWidth_percent="1"
+        />
 
     <TextView
         android:id="@+id/textView"
@@ -232,21 +92,20 @@
 
     <Button
         android:id="@+id/finishMainActivityButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_width="146dp"
+        android:layout_height="45dp"
         android:text="Kết thúc"
-        app:layout_constraintEnd_toEndOf="@+id/noNine"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/guideline14"
+        app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <Button
         android:id="@+id/printEetButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginEnd="64dp"
         android:text="In EET"
-        app:layout_constraintStart_toStartOf="@+id/minusButton"
-        app:layout_constraintTop_toBottomOf="@+id/minusButton" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline15"
+        app:layout_constraintEnd_toStartOf="@+id/buttonPrintReciept" />
 
     <Button
         android:id="@+id/employeeEetReceiptButton"
@@ -256,5 +115,251 @@
         android:text="Show EET"
         app:layout_constraintBottom_toBottomOf="@+id/printEetButton"
         app:layout_constraintEnd_toStartOf="@+id/printEetButton" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftNumPad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3
+" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="1"
+        app:layout_constraintWidth_percent="1"
+
+        app:layout_constraintBottom_toTopOf="@+id/guideline17"
+        app:layout_constraintEnd_toStartOf="@+id/guideline14"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/leftNumPad"
+        app:layout_constraintTop_toTopOf="@+id/guideline18">
+
+        <Button
+            android:id="@+id/buttonErase"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="0px"
+            android:layout_height="0dp"
+            android:background="@color/colorAccent"
+            android:text="Xoa"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/noSeven"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="0dp"
+            android:text="7"
+            android:textSize="50sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toEndOf="@+id/buttonErase"
+            app:layout_constraintTop_toTopOf="@+id/buttonErase"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/noEight"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="8"
+            android:textSize="50sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toEndOf="@+id/noSeven"
+            app:layout_constraintTop_toTopOf="@+id/noSeven"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/noNine"
+            android:layout_width="0dp"
+            android:layout_height="0sp"
+            android:text="9"
+            android:textSize="50sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toEndOf="@+id/noEight"
+            app:layout_constraintTop_toTopOf="@+id/noEight"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/noFive"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="0dp"
+            android:text="5"
+            android:textSize="50sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toEndOf="@+id/noFour"
+            app:layout_constraintTop_toTopOf="@+id/noFour"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/noSix"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="0dp"
+            android:text="6"
+            android:textSize="50sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toEndOf="@+id/noFive"
+            app:layout_constraintTop_toTopOf="@+id/noFive"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/noFour"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:text="4"
+            android:textSize="50sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="@+id/noSeven"
+            app:layout_constraintTop_toBottomOf="@+id/noSeven"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/noThree"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="3"
+            android:textSize="50sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toEndOf="@+id/noTwo"
+            app:layout_constraintTop_toTopOf="@+id/noTwo"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/noZero"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:text="0"
+            android:textSize="50sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="@+id/noOne"
+            app:layout_constraintTop_toBottomOf="@+id/noOne"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/noTwo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="2"
+            android:textSize="50sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toEndOf="@+id/noOne"
+            app:layout_constraintTop_toTopOf="@+id/noOne"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/noOne"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:text="1"
+            android:textSize="50sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="@+id/noFour"
+            app:layout_constraintTop_toBottomOf="@+id/noFour"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/plusButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:text="+"
+            android:textSize="50sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="@+id/customPriceButton"
+            app:layout_constraintTop_toBottomOf="@+id/customPriceButton"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+
+            android:id="@+id/halfPriceButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:text="50%"
+            android:textSize="30sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="@+id/buttonErase"
+            app:layout_constraintTop_toBottomOf="@+id/buttonErase"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/customPriceButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:text="Trang trí"
+            android:textSize="20sp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="@+id/halfPriceButton"
+            app:layout_constraintTop_toBottomOf="@+id/halfPriceButton"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/minusButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="Sua"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintTop_toTopOf="@+id/noZero"
+            app:layout_constraintWidth_percent="0.25" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

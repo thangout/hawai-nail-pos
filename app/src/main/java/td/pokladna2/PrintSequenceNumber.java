@@ -38,7 +38,7 @@ public class PrintSequenceNumber extends AppCompatActivity {
     //set the ID of a shop that the app is installed for
     // shopID = 2 is for Sestka
     // shopID = 1 is for Flora
-    int shopID = 1;
+    int shopID = 2;
 
 
     //BL shit
